@@ -1,0 +1,28 @@
+$bg_color: #ffffff;
+$primary_color: #ffead2;
+$secondary_color: #dc9f58;
+$third_color: #f5f0ea;
+$fourth_color: #809ba8;
+$icon_color: rgb(97, 97, 97);
+
+$page-width: 1100px;
+
+@mixin flexbox-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin pad {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+// @include pad {}
+
+@mixin mobile {
+  @media (max-width: 540px) {
+    @content;
+  }
+}

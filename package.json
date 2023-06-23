@@ -1,0 +1,40 @@
+{
+  "name": "fatzai_vue",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "@rollup/plugin-inject": "^5.0.3",
+    "aos": "^2.3.4",
+    "axios": "^1.4.0",
+    "eslint": "^8.42.0",
+    "jquery": "^3.7.0",
+    "pinia": "^2.0.36",
+    "vue": "^3.3.2",
+    "vue-router": "^4.2.2",
+    "vue-slick": "^1.2.0",
+    "vue-slick-carousel": "^1.0.6",
+    "vue-slide-up-down": "^2.0.1",
+    "vue3-carousel": "^0.3.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.5",
+    "@babel/eslint-parser": "^7.22.5",
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.14.1",
+    "prettier": "^2.8.8",
+    "sass": "^1.63.4",
+    "vite": "^4.3.5",
+    "vite-plugin-eslint": "^1.8.1"
+  }
+}

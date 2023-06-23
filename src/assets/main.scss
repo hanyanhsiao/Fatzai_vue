@@ -1,0 +1,48 @@
+@import "https://fonts.googleapis.com/earlyaccess/notosanstc.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Noto Sans TC", sans-serif;
+  font-weight: 200;
+  margin: 0 auto;
+}
+
+/* "Noto Serif TC" */
+html {
+  font-size: 18px;
+  @include mobile {
+    font-size: 16px;
+    font-weight: 300;
+  }
+}
+
+button,
+a {
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  text-decoration: none;
+  color: black;
+  border: 0;
+  cursor: pointer;
+}
+p {
+  text-align: justify;
+  line-height: 1.8;
+  letter-spacing: 1px;
+}
+.title {
+  /* border: 2px solid rgb(0, 21, 255); */
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.5rem;
+  color: $fourth_color;
+  text-align: center;
+  padding-bottom: 50px;
+  @include pad {
+    padding-bottom: 20px;
+  }
+}
