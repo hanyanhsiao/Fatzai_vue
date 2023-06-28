@@ -29,11 +29,19 @@ a {
   border: 0;
   cursor: pointer;
 }
+
 p {
   text-align: justify;
   line-height: 1.8;
   letter-spacing: 1px;
 }
+
+i{
+  @include flexbox-center;
+  cursor: pointer;
+}
+
+//---------------標題-----------------
 .title {
   /* border: 2px solid rgb(0, 21, 255); */
   font-size: 1.5rem;
@@ -45,4 +53,13 @@ p {
   @include pad {
     padding-bottom: 20px;
   }
+}
+
+/*--------------分隔線----------------*/
+.hr {
+  max-width: $page-width;
+  margin: 0 auto;
+  padding-top: 2px;
+  border: $secondary_color;
+  background: linear-gradient(to right, transparent, $secondary_color, transparent);
 }

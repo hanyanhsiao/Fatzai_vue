@@ -4,6 +4,7 @@ import HeaderView from "../components/HeaderView.vue";
 import FooterView from "../components/FooterView.vue";
 import { onMounted } from "vue";
 import ItemCarousel from "../components/ItemCarousel.vue";
+import FadeBanner from "../components/FadeBanner.vue";
 
 
 // --常見問題js--
@@ -30,27 +31,7 @@ onMounted(() => {
   <HeaderView />
   <div class="wrapper">
     <main>
-      <!-- banner -->
-      <section class="banner">
-        <div class="banner_img fade">
-          <img src="../assets/image/banner/banner2.jpg" alt="" />
-          <img src="../assets/image/banner/banner5.jpg" alt="" />
-          <img src="../assets/image/banner/banner3.jpg" alt="" />
-          <img src="../assets/image/banner/banner4.jpg" alt="" />
-          <img src="../assets/image/banner/banner1.jpg" alt="" />
-        </div>
-        <div class="banner_left">
-          <img src="../assets/image/banner/banner0.png" alt="" />
-        </div>
-        <div class="banner_title" data-aos="fade-left" data-aos-anchor="#example-anchor" data-aos-offset="500"
-          data-aos-duration="500">
-          <!-- <div class="banner_title"> -->
-          <h1>FATZAI</h1>
-          <h1>Pâtisserie</h1>
-          <h1>法 式 甜 點 專 賣</h1>
-        </div>
-      </section>
-
+      <FadeBanner />
       <!-- 主要區域 -->
       <section class="main">
         <!-- 關於肥宅 -->
@@ -223,90 +204,10 @@ onMounted(() => {
       <div id="common_mask"></div>
     </main>
   </div>
-
   <FooterView />
 </template>
 
 <style lang="scss" scoped>
-//  -------------banner----------------
-.banner {
-  margin: 0 auto;
-  position: relative;
-  display: flex;
-  // outline: 2px solid rgb(255, 36, 36);
-
-  .banner_img {
-    max-width: 100%;
-    // margin: 0 auto;
-    display: flex;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .banner_left {
-    position: absolute;
-    left: 0;
-    top: 0;
-
-    img {
-      width: 100%;
-    }
-  }
-
-  .banner_title {
-    position: absolute;
-    top: 35%;
-    left: 18%;
-    max-width: $page-width;
-    // outline: 1px solid rgb(213, 26, 26);
-
-    @include pad {
-      position: absolute;
-      top: 35%;
-      left: 15%;
-    }
-
-    @include mobile {
-      position: absolute;
-      top: 20%;
-      left: 10%;
-    }
-
-    h1 {
-      font-family: "Noto Serif TC", serif;
-      text-align: center;
-      font-size: 1.6rem;
-      font-weight: 500;
-      line-height: 1.6;
-      letter-spacing: 0.2rem;
-
-      &:last-child {
-        border-top: 2px solid white;
-        line-height: 2;
-      }
-
-      @include pad {
-        font-size: 1rem;
-        line-height: 1.5;
-        letter-spacing: 0.1rem;
-
-        &:last-child {
-          border-top: 1px solid white;
-          line-height: 2;
-          margin-top: 2px;
-        }
-      }
-
-      @include mobile {
-        font-size: 0.9rem;
-        line-height: 1.2;
-      }
-    }
-  }
-}
-
 //  -------------關於肥宅---------------
 .aboutMe {
   background-image: url(../assets/image/material/about_bg.png);

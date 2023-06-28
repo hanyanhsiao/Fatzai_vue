@@ -1,158 +1,157 @@
 <script setup>
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue'
-import { Navigation, Pagination } from 'swiper'
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation, Pagination } from "swiper";
 
 // Import Swiper styles
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-const modules = [Navigation, Pagination]
+const modules = [Navigation, Pagination];
 
 const breakpoints = {
-    0: {
-        slidesPerView: 2,
-        spaceBetween: 20,
-    },
-    560: {
-        slidesPerView: 3,
-        spaceBetween: 20,
-    },
-    768: { slidesPerView: 4, spaceBetween: 20 },
-}
+  0: {
+    slidesPerView: 2,
+    spaceBetween: 20,
+  },
+  560: {
+    slidesPerView: 3,
+    spaceBetween: 20,
+  },
+  768: {
+    slidesPerView: 4,
+    spaceBetween: 20
+  },
+};
 // 下方點點
 const pagination = {
-    el: '.dots',
-    type: 'bullets',
-    bulletActiveClass: 'dotsActive',
-}
+  el: ".dots",
+  type: "bullets",
+  bulletActiveClass: "dotsActive",
+};
 // 左右箭頭
 const navigation = {
-    nextEl: '.arrow_next',
-    prevEl: '.arrow_pre',
-}
+  nextEl: ".arrow_next",
+  prevEl: ".arrow_pre",
+};
 </script>
 
 <template>
+  <div>
     <div class="carousel_container">
-        <div class="arrow_pre"></div>
-        <swiper
-            :modules="modules"
-            :breakpoints="breakpoints"
-            :pagination="pagination"
-            :navigation="navigation"
-            loop
-            class="items"
-        >
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse7.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Cassis Mousse</h3>
-                            <p>$180</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse8.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Cassis Mousse</h3>
-                            <p>$180</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse8.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Pistache Mousse</h3>
-                            <p>$250</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse7.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Cassis Mousse</h3>
-                            <p>$180</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse5.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Chocolate Yo-Yo Cake</h3>
-                            <p>$199</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse9.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Vanilla Cake Role</h3>
-                            <p>$160</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse7.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Cassis Mousse</h3>
-                            <p>$180</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-            <swiper-slide>
-                <div class="it">
-                    <router-link to="/ItemView">
-                        <div class="img_block">
-                            <img src="../assets/image/items/mousse7.jpg" alt="" />
-                        </div>
-                        <div class="text_block">
-                            <h3>Cassis Mousse</h3>
-                            <p>$180</p>
-                        </div>
-                    </router-link>
-                </div>
-            </swiper-slide>
-        </swiper>
-        <div class="arrow_next"></div>
+      <div class="arrow_pre"></div>
+      <swiper :modules="modules" :breakpoints="breakpoints" :pagination="pagination" :navigation="navigation" loop
+        class="items">
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse7.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Cassis Mousse</h3>
+                <p>$180</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse8.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Cassis Mousse</h3>
+                <p>$180</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse8.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Pistache Mousse</h3>
+                <p>$250</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse7.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Cassis Mousse</h3>
+                <p>$180</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse5.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Chocolate Yo-Yo Cake</h3>
+                <p>$199</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse9.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Vanilla Cake Role</h3>
+                <p>$160</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse7.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Cassis Mousse</h3>
+                <p>$180</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+        <swiper-slide>
+          <div class="it">
+            <router-link to="/ItemView">
+              <div class="img_block">
+                <img src="../assets/image/items/mousse7.jpg" alt="" />
+              </div>
+              <div class="text_block">
+                <h3>Cassis Mousse</h3>
+                <p>$180</p>
+              </div>
+            </router-link>
+          </div>
+        </swiper-slide>
+      </swiper>
+      <div class="arrow_next"></div>
     </div>
     <div class="dots"></div>
+  </div>
 </template>
 
 <style lang="scss">
