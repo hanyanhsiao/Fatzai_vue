@@ -2,6 +2,8 @@
 <script>
 import AOS from "aos";
 import "aos/dist/aos.css";
+// import $ from "jquery";
+// import { onMounted } from "vue";
 
 export default {
   mounted() {

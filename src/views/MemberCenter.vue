@@ -1,6 +1,14 @@
 <script setup>
 import HeaderView from "../components/HeaderView.vue";
 import FooterView from "../components/FooterView.vue";
+import $ from "jquery";
+import { onMounted } from "vue";
+onMounted(() => {
+  $('.openMenu').click(function () {
+    $('.Member_Area_menu').toggleClass('active');
+    // $("#common_mask").toggle();
+  })
+});
 </script>
 
 <template>
@@ -17,12 +25,11 @@ import FooterView from "../components/FooterView.vue";
         </div>
       </div>
       <div class="Member_Area_wrapper">
-
         <aside class="Member_Area_aside">
           <div class="openMenu">
             <span>選單</span>
             <lord-icon class="openMenu_arrow" src="https://cdn.lordicon.com/rvuqcvqy.json" trigger="loop" delay="500"
-              colors="primary:#dc9f58,secondary:#b4b4b4" style="width:30px;height:30px" />
+              colors="primary:#809ba8,secondary:#809ba8" style="width:30px;height:30px" />
           </div>
           <ul class="Member_Area_menu">
             <li class="tablinks" onclick="changeSet(event, 'myAccount')" id="defaultOpen">我的帳戶</li>
@@ -193,16 +200,17 @@ import FooterView from "../components/FooterView.vue";
       padding-top: 30px;
 
       @include pad {
-        font-size: 8rem;
+        font-size: 7rem;
         text-align: center;
+        overflow: hidden;
       }
     }
 
     //  標題
     .Member_Area_title {
       position: absolute;
-      top: 200px;
-      padding: 20px;
+      top: 210px;
+      padding: 10px 20px;
       font-size: 1.5rem;
       border: 1px solid $secondary_color;
       animation: clippath 1s ease forwards;
@@ -243,68 +251,83 @@ import FooterView from "../components/FooterView.vue";
       padding: 15px;
     }
 
-    /* 左側側邊欄 */
+    //  左側側邊欄 
     .Member_Area_aside {
       margin-right: 100px;
 
       @include pad {
-        margin-right: 0px;
-        margin-bottom: 30px;
+        margin-right: 0;
       }
 
+      // 手機版選單
       .openMenu {
         display: none;
 
         @include pad {
-          background-color: $secondary_color;
+          background-color: $third_color;
           line-height: 30px;
-          margin: 0 5px;
           padding: 5px 10px;
-          background-color: $primary_color;
           cursor: pointer;
           transition: 0.4s;
-          border-top: 2px solid white;
-          border-left: 2px solid white;
-          box-shadow: 0 0 0 5px $primary_color;
-          border-radius: 1px;
+          border: 1px solid $fourth_color;
+          border-bottom: 0;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          color: $fourth_color;
+          font-weight: 500;
         }
       }
 
-      li {
-        padding: 10px;
-        line-height: 30px;
-        border-bottom: 1px solid #ccc;
-        transform: scale(1);
+      .Member_Area_menu {
+        @include pad {
+          height: 0;
+          transition: all 0.5s ease-in-out;
+          overflow: hidden;
+          border: 1px solid $fourth_color;
+          border-top: 0;
+          margin-bottom: 20px;
+        }
 
+        li {
+          padding: 10px;
+          line-height: 30px;
+          border-bottom: 1px solid #ccc;
+          transform: scale(1);
 
-        &:hover {
+          &:hover {
+            color: $secondary_color;
+            cursor: pointer;
+            transform: scale(1.1);
+            font-weight: 400;
+
+            @include pad {
+              /* 手機點擊不要放大 */
+              transform: scale(1);
+            }
+
+          }
+
+          .aside_favorite {
+            display: flex;
+            align-items: center;
+
+            lord-icon {
+              margin-left: 5px;
+            }
+          }
+        }
+
+        li.active {
           color: $secondary_color;
-          cursor: pointer;
-          transform: scale(1.1);
           font-weight: 400;
-
-          @include pad {
-            /* 手機點擊不要放大 */
-            transform: scale(1);
-          }
-
-        }
-
-        .aside_favorite {
-          display: flex;
-
-          lord-icon {
-            margin-left: 5px;
-          }
         }
       }
 
-      li.active {
-        color: $secondary_color;
-        font-weight: 400;
+      .Member_Area_menu.active {
+        @include pad {
+          height: 255px;
+        }
       }
     }
 
@@ -328,6 +351,10 @@ import FooterView from "../components/FooterView.vue";
           font-size: 1.3rem;
           display: inline-block;
           font-weight: 400;
+
+          @include mobile {
+            padding: 5px 5px 5px 0;
+          }
         }
 
         .signOut {
@@ -360,12 +387,18 @@ import FooterView from "../components/FooterView.vue";
     }
 
     /* 右側下半部近期訂單 */
+    // 訂單標題
     .recent_orders_title {
       padding: 20px;
       font-weight: 400;
       text-align: center;
+
+      @include mobile {
+        text-align: center;
+      }
     }
 
+    // 訂單內容
     .order {
       margin-bottom: 30px;
       border: 1px solid #ccc;
@@ -377,6 +410,12 @@ import FooterView from "../components/FooterView.vue";
         text-align: center;
         background-color: #e0e0e0;
         line-height: 40px;
+
+        @include mobile {
+          grid-template: 1fr 1fr / 1fr 1fr 1fr;
+          line-height: 30px;
+        }
+
       }
 
       .order_content {
@@ -385,11 +424,24 @@ import FooterView from "../components/FooterView.vue";
         text-align: center;
         line-height: 6;
 
+        @include mobile {
+          display: grid;
+          grid-template: 1fr 1fr / 1fr 1fr 1fr;
+          text-align: center;
+          line-height: 50px;
+          // border: 1px solid #e4e4e4;
+        }
+
         li {
           border-right: 1px solid #ccc;
           font-size: .9rem;
 
           &:last-child {
+            border-right: 0;
+          }
+
+          @include mobile {
+            border-bottom: 1px solid #e4e4e4;
             border-right: 0;
           }
         }
@@ -402,9 +454,6 @@ import FooterView from "../components/FooterView.vue";
         }
       }
     }
-
-
   }
-
 }
 </style>

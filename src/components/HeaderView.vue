@@ -7,6 +7,10 @@ onMounted(() => {
     $(".nav_list").toggleClass("active");
     $("#common_mask").toggle();
   });
+  //點擊黑色遮罩也能收合
+  $('#common_mask').click(function () {
+    $('#mobile-menu').click()
+  });
   // 點擊當頁加上顏色
   var currentUrl = window.location.href.split("/");
   var links = document.querySelectorAll(".nav_list a");
@@ -25,31 +29,20 @@ onMounted(() => {
     <!-- 導覽列 -->
     <nav class="nav">
       <!-- 左側LOGO -->
-      <router-link to="/" class="logo"
-        ><img src="../assets/image/logo2.svg" alt="logo"
-      /></router-link>
+      <router-link to="/" class="logo"><img src="../assets/image/logo2.svg" alt="logo" /></router-link>
       <!-- 右側選單 -->
       <div class="nav_right">
         <!-- 手機才出現的icon -->
         <!-- 會員專區 -->
         <router-link to="/MemberCenter" class="mobile_icon">
-          <lord-icon
-            src="https://cdn.lordicon.com/dxjqoygy.json"
-            trigger="click"
-            colors="primary:#809ba8,secondary:#809ba8"
-            style="width: 40px; height: 40px"
-          />
+          <lord-icon src="https://cdn.lordicon.com/dxjqoygy.json" trigger="click"
+            colors="primary:#809ba8,secondary:#809ba8" style="width: 40px; height: 40px" />
         </router-link>
 
         <!-- 購物車 -->
         <router-link to="/CartView" class="mobile_icon">
-          <lord-icon
-            class="mobile_icon_cart"
-            src="https://cdn.lordicon.com/slkvcfos.json"
-            trigger="click"
-            colors="primary:#809ba8,secondary:#809ba8"
-            style="width: 40px; height: 40px"
-          />
+          <lord-icon class="mobile_icon_cart" src="https://cdn.lordicon.com/slkvcfos.json" trigger="click"
+            colors="primary:#809ba8,secondary:#809ba8" style="width: 40px; height: 40px" />
           <span class="cart_num num_active"></span>
         </router-link>
 
@@ -67,16 +60,9 @@ onMounted(() => {
           <li><router-link to="/ItemList">產品列表</router-link></li>
           <li><router-link to="/MemberCenter">會員專區</router-link></li>
           <li>
-            <router-link to="/CartView"
-              >購物車
-              <lord-icon
-                class="car_icon"
-                src="https://cdn.lordicon.com/slkvcfos.json"
-                trigger="loop"
-                delay="1000"
-                colors="primary:#545454,secondary:#545454"
-                style="width: 30px; height: 30px"
-              />
+            <router-link to="/CartView">購物車
+              <lord-icon class="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
+                colors="primary:#545454,secondary:#545454" style="width: 30px; height: 30px" />
               <span class="cart_num num_active"></span>
             </router-link>
           </li>
@@ -110,7 +96,7 @@ onMounted(() => {
       padding: 0 20px;
     }
 
-    .logo > img {
+    .logo>img {
       height: 60px;
     }
 
