@@ -111,7 +111,6 @@ import FooterView from "../components/FooterView.vue";
             $<p class="dollars">99</p>
             <button class="moreItem_addCart">
               <p>加入購物車</p>
-              <!-- <script src="https://cdn.lordicon.com/ritcuqlt.js"></script> -->
               <lord-icon src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
                 colors="primary:#dc9f58,secondary:#dc9f58" style="width:30px;height:30px" />
             </button>
@@ -125,13 +124,12 @@ import FooterView from "../components/FooterView.vue";
             $<p class="dollars">160</p>
             <button class="moreItem_addCart">
               <p>加入購物車</p>
-              <!-- <script src="https://cdn.lordicon.com/ritcuqlt.js"></script> -->
               <lord-icon src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
                 colors="primary:#dc9f58,secondary:#dc9f58" style="width:30px;height:30px" />
             </button>
           </li>
           <li>
-            <router-link to="./item.html">
+            <router-link to="./itemView">
               <img src="../assets/image/items/mousse5.jpg" />
             </router-link>
             <h3 class="item_name">Chocolate Cake</h3>
@@ -139,7 +137,6 @@ import FooterView from "../components/FooterView.vue";
             $<p class="dollars">120</p>
             <button class="moreItem_addCart">
               <p>加入購物車</p>
-              <!-- <script src="https://cdn.lordicon.com/ritcuqlt.js"></script> -->
               <lord-icon clas="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
                 colors="primary:#dc9f58,secondary:#dc9f58" style="width:30px;height:30px" />
             </button>
@@ -688,7 +685,7 @@ import FooterView from "../components/FooterView.vue";
         line-height: 2rem;
         text-align: center;
         font-size: 1.2rem;
-        font-weight: 500;
+        font-weight: 400;
         box-shadow: 0 0 5px #CCC;
         letter-spacing: 12px;
         width: 100%;
