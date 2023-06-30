@@ -3,8 +3,117 @@ import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
 import ItemCarousel from '../components/ItemCarousel.vue'
 import { useCommonStore } from '@/stores/common'
+import { onMounted } from 'vue'
+import { ref } from 'vue'
 
 const common = useCommonStore()
+const currentTab = ref('delivery');
+// 下方商品說明
+const tabs = ref([
+    {
+        id: 'delivery',
+        title: '運送說明',
+        questions: [
+            {
+                id: 'q1',
+                question: 'Q1為什麼有些蛋糕無法宅配？',
+                answer: '我們的宅配透過黑貓宅急便寄出，蛋糕屬於脆弱商品，運送過程中容易毀損，故無法寄送。'
+            },
+            {
+                id: 'q2',
+                question: 'Q2可以指定到貨日期嗎？',
+                answer: '我們宅配與黑貓宅急便配合運送，無法指定到貨日期。'
+            },
+            {
+                id: 'q3',
+                question: 'Q3為什麼宅配無法指定到貨日期與時間？',
+                answer: '黑貓宅急便送貨量過多時，無法指定到貨日，有可能延遲二到三日到貨。'
+            },
+            {
+                id: 'q4',
+                question: '',
+                answer: '<br/>※疫情影響，可能會延遲2-3天到貨，也無法指定配送時間，亦不會當日寄出，當日就收到貨。<br/>※建議您先行聯繫收件人，告知商品配送日期與時間；若無法順利送達，恕無法辦理退貨與退款，如重新寄送將酌收配送。<br/>※若因天災或意外等人為不可抗力之因素，而無法按時配送，將通知您延後送貨或為您取消訂單。'
+            }
+        ]
+    },
+    {
+        id: 'faq',
+        title: '常見問題',
+        questions: [
+            {
+                id: 'q1',
+                question: 'Q1: 運輸方式及運費是多少？',
+                answer: '運費會根據您的地址和訂單重量而定，我們提供宅配及店面取貨兩種方式，具體運費請見結帳頁面。'
+            },
+            {
+                id: 'q2',
+                question: 'Q2: 支付方式有哪些？',
+                answer: '我們接受信用卡、店面現金支付、Line Pay等多種支付方式。'
+            },
+            {
+                id: 'q3',
+                question: 'Q3: 退換貨政策是什麼？',
+                answer: '如有任何產品品質問題，請在收到產品後的24小時內與我們聯繫。'
+            },
+            {
+                id: 'q4',
+                question: 'Q4: 產品保質期和保存方式是什麼？',
+                answer: '保質期會因產品不同而有所不同，詳細資訊請查看產品頁面或包裝上的標籤。<br/>產品保存方式建議在陰涼乾燥處保存，不要直接放在陽光下。'
+            },
+            {
+                id: 'q5',
+                question: 'Q5: 是否有特別優惠或促銷活動？',
+                answer: '我們會不定期推出優惠和促銷活動，可以關注我們的官方網站和社交媒體獲取最新消息。'
+            },
+            {
+                id: 'q6',
+                question: 'Q6: 訂單是否可取消或更改？',
+                answer: '如需取消或更改訂單，請在收到訂單確認郵件後聯繫我們，我們將盡力協助處理。'
+            }
+        ]
+    },
+    {
+        id: 'customer',
+        title: '顧客評價',
+        questions: [
+            {
+                id: 'q1',
+                question: '"他們的巧克力蛋糕真是太好吃了！"',
+                answer: '"我喜歡他們的提拉米蘇塔，但是價格有點貴。"'
+            },
+            {
+                id: 'q2',
+                question: '"新出的杯子蛋糕是絕對不能錯過的！"',
+                answer: '"他們的泡芙選擇豐富，口感也很好。"'
+            },
+            {
+                id: 'q3',
+                question: '"他們的巧克力蛋糕真是太好吃了！"',
+                answer: '"我喜歡他們的提拉米蘇塔，但是價格有點貴。"'
+            },
+            {
+                id: 'q4',
+                question: '"草莓千層真是令人驚艷。"',
+                answer: '"他們的蛋糕捲是我迄今為止吃過最好吃的。"'
+            },
+            {
+                id: 'q5',
+                question: '"檸檬塔口感非常清新，是夏天必嚐的甜點之一。"',
+                answer: '"我在這裡吃到了世界上最好吃的馬卡龍！"'
+            },
+            {
+                id: 'q6',
+                question: '"Fatzai的蛋糕口感很細膩，非常好吃，是我吃過的最好的蛋糕沒有之一。"',
+                answer: '"巧克力塔口感非常濃郁，巧克力味道十分濃厚，是巧克力控必嚐的甜點之一。"'
+            },
+        ]
+    }])
+function changeTab(tabname) {
+    currentTab.value = tabname;
+}
+onMounted(() => {
+})
+
 </script>
 
 <template>
@@ -32,11 +141,15 @@ const common = useCommonStore()
           </ul>
           <a href="./car.html" class="cart_pay">購物車結帳</a>
         </div> -->
+
+                <!-- 麵包屑-->
                 <ol class="breadcrumb">
                     <li><router-link to="./ItemList">產品列表</router-link></li>
                     <li><router-link to="./ItemList">小塔系列</router-link></li>
                     <li><router-link to="#">提拉米蘇塔</router-link></li>
                 </ol>
+
+                <!-- 上方商品介紹 -->
                 <div class="item_block">
                     <div class="left_block">
                         <img src="../assets/image/items/tart1.jpg" alt="" id="main_item" />
@@ -91,61 +204,18 @@ const common = useCommonStore()
                 <!-- 分隔線 -->
                 <hr class="hr" />
 
+                <!-- 下方商品說明 -->
                 <div class="item_description">
                     <div class="tab">
-                        <button class="tablinks" onclick="changeTab(event,'delivery')" id="defaultOpen">運送說明</button>
-                        <button class="tablinks" onclick="changeTab(event,'faq')">常見問題</button>
-                        <button class="tablinks" onclick="changeTab(event,'customer')">顧客評價</button>
+                        <button v-for="tab in tabs" :key="tab.id" @click="changeTab(tab.id)"
+                            :class="{ active: currentTab === tab.id }">{{ tab.title }}
+                        </button>
                     </div>
-
-                    <div id="delivery" class="tabcontent">
-                        <p>Q1為什麼有些蛋糕無法宅配？</p>
-                        <p>我們的宅配透過黑貓宅急便寄出，蛋糕屬於脆弱商品，運送過程中容易毀損，故無法寄送。</p>
-                        <p>Q2可以指定到貨日期嗎？</p>
-                        <p>我們宅配與黑貓宅急便配合運送，無法指定到貨日期。</p>
-                        <p>Q3為什麼宅配無法指定到貨日期與時間？</p>
-                        <p>黑貓宅急便送貨量過多時，無法指定到貨日，有可能延遲二到三日到貨。</p>
-                        <p>
-                            ※疫情影響，可能會延遲2-3天到貨，也無法指定配送時間，亦不會當日寄出，當日就收到貨。<br />
-                            ※建議您先行聯繫收件人，告知商品配送日期與時間；若無法順利送達，恕無法辦理退貨與退款，如重新寄送將酌收配送費用。<br />
-                            ※若因天災或意外等人為不可抗力之因素，而無法按時配送，將通知您延後送貨或為您取消訂單。
-                        </p>
-                    </div>
-
-                    <div id="faq" class="tabcontent">
-                        <p>Q1: 運輸方式及運費是多少？</p>
-                        <p>運費會根據您的地址和訂單重量而定，我們提供宅配及店面取貨兩種方式，具體運費請見結帳頁面。</p>
-
-                        <p>Q2: 支付方式有哪些？</p>
-                        <p>我們接受信用卡、店面現金支付、Line Pay等多種支付方式。</p>
-
-                        <p>Q3: 退換貨政策是什麼？</p>
-                        <p>如有任何產品品質問題，請在收到產品後的24小時內與我們聯繫。</p>
-
-                        <p>Q4: 產品保質期和保存方式是什麼？</p>
-                        <p>
-                            保質期會因產品不同而有所不同，詳細資訊請查看產品頁面或包裝上的標籤。<br />
-                            產品保存方式建議在陰涼乾燥處保存，不要直接放在陽光下。
-                        </p>
-
-                        <p>Q5: 是否有特別優惠或促銷活動？</p>
-                        <p>我們會不定期推出優惠和促銷活動，可以關注我們的官方網站和社交媒體獲取最新消息。</p>
-
-                        <p>Q6: 訂單是否可取消或更改？</p>
-                        <p>如需取消或更改訂單，請在收到訂單確認郵件後聯繫我們，我們將盡力協助處理。</p>
-                    </div>
-
-                    <div id="customer" class="tabcontent">
-                        <p>"他們的巧克力蛋糕真是太好吃了！"</p>
-                        <p>"我喜歡他們的提拉米蘇塔，但是價格有點貴。"</p>
-                        <p>"新出的杯子蛋糕是絕對不能錯過的！"</p>
-                        <p>"他們的泡芙選擇豐富，口感也很好。"</p>
-                        <p>"草莓千層真是令人驚艷。"</p>
-                        <p>"他們的蛋糕捲是我迄今為止吃過最好吃的。</p>
-                        <p>"檸檬塔口感非常清新，是夏天必嚐的甜點之一。"</p>
-                        <p>"我在這裡吃到了世界上最好吃的馬卡龍！"</p>
-                        <p>"Fatzai的蛋糕口感很細膩，非常好吃，是我吃過的最好的蛋糕沒有之一。</p>
-                        <p>"巧克力塔口感非常濃郁，巧克力味道十分濃厚，是巧克力控必嚐的甜點之一。"</p>
+                    <div v-for="tab in tabs" :key="tab.id" v-show="currentTab === tab.id" class="tabcontent">
+                        <template v-for="question in tab.questions" :key="question.id">
+                            <p>{{ question.question }}</p>
+                            <p v-html="question.answer"></p>
+                        </template>
                     </div>
                 </div>
 
@@ -475,10 +545,10 @@ const common = useCommonStore()
                     font-weight: 400;
                 }
 
-                &:nth-child(7) {
-                    color: inherit;
-                    font-weight: 200;
-                }
+                //     &:nth-child(7) {
+                //         color: inherit;
+                //         font-weight: 200;
+                //     }
             }
         }
     }

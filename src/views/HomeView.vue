@@ -10,15 +10,13 @@ import { onMounted } from 'vue'
 
 const common = useCommonStore()
 
-// --常見問題js--
 onMounted(() => {
+    // --常見問題手風琴--
     var acc = document.getElementsByClassName('accordion')
-    var i
-
-    for (i = 0; i < acc.length; i++) {
+    for (var i = 0; i < acc.length; i++) {
         acc[i].addEventListener('click', function () {
             this.classList.toggle('active')
-
+            // 獲取當前元素同層的下一個元素，<div class="faq_answer">
             var panel = this.nextElementSibling
             if (panel.style.maxHeight) {
                 panel.style.maxHeight = null

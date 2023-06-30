@@ -10,6 +10,9 @@ import SeasonItems from '../components/SeasonItems.vue'
 import CupcakeItems from '../components/CupcakeItems.vue'
 import { useRoute } from 'vue-router'
 
+
+
+
 const route = useRoute()
 const common = useCommonStore()
 
@@ -18,13 +21,15 @@ const toggleAside = () => {
   isClicked.value = !isClicked.value;
 }
 
+// 預設全部商品
 let activeTab = ref('AllItems');
 
 onMounted(() => {
-
-  // const productParam = route.query || {};
-  // if (productParam.product)
-  //   activeTab.value = productParam.product
+  // 從特定分類點入
+  const productParam = route.query || {};
+  if (productParam.product) {
+    activeTab.value = productParam.product
+  }
 
   //分頁器
   $('.pagination li:first').addClass('active')
@@ -105,7 +110,7 @@ onMounted(() => {
       <!-- 側邊欄側邊欄側邊欄側邊欄側邊欄 -->
       <aside class="aside" :class="{ open: isClicked }">
         <ul>
-          <li @click="activeTab = 'AllItems'; console.log(route.query)" :class="{ 'active': activeTab === 'AllItems' }">
+          <li @click="activeTab = 'AllItems'" :class="{ 'active': activeTab === 'AllItems' }">
             全部商品</li>
           <li @click="activeTab = 'SeasonItems'" :class="{ 'active': activeTab === 'SeasonItems' }">季節限定</li>
           <li @click="activeTab = 'CupcakeItems'" :class="{ 'active': activeTab === 'CupcakeItems' }">杯子蛋糕系列</li>
