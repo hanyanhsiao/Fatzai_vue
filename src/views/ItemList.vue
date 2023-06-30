@@ -1,65 +1,63 @@
 <script setup>
-import HeaderView from "../components/HeaderView.vue";
-import FooterView from "../components/FooterView.vue";
-import { onMounted } from "vue";
-import $ from "jquery";
+import HeaderView from '../components/HeaderView.vue'
+import FooterView from '../components/FooterView.vue'
+import $ from 'jquery'
+import { ref } from 'vue'
+import { onMounted } from 'vue'
+import { useCommonStore } from '@/stores/common'
+// import AllItems from '../components/AllItems.vue'
+
+const common = useCommonStore()
+
+const isClicked = ref(false);
+const toggleAside = () => {
+  isClicked.value = !isClicked.value;
+}
+
+let activeTab = ref('AllItems');
 
 onMounted(() => {
 
-  //手機側邊欄顯示
-  $(function () {
-    $('#aside-menu').click(function () {
-      $('.aside').toggleClass('open');
-      $(this).toggleClass('active')
-      $('#mask').toggle()
-    })
-    $('#mask').click(function () {
-      $('#aside-menu').click()
-    });
-  })
-
   //分頁器
-  $(".pagination li:first").addClass('active');
+  $('.pagination li:first').addClass('active')
 
-  $(".pagination li").click(function () {
-    $(this).siblings("li").removeClass("active");
-    $(this).addClass("active")
-  });
+  $('.pagination li').click(function () {
+    $(this).siblings('li').removeClass('active')
+    $(this).addClass('active')
+  })
 
   //向左點
   $('.previous_page').click(function () {
-
-    if ($(".pagination>.active").prev().is('li')) {
-      let target_active_page = $(".pagination>.active");
-      target_active_page.removeClass("active");
-      target_active_page.prev().addClass("active");
-      changePage(target_active_page.prev().html());
+    if ($('.pagination>.active').prev().is('li')) {
+      let target_active_page = $('.pagination>.active')
+      target_active_page.removeClass('active')
+      target_active_page.prev().addClass('active')
+      changePage(target_active_page.prev().html())
     }
   })
 
   //向右點
   $('.next_page').click(function () {
-    if ($(".pagination>.active").next().is('li')) {
-      let target_active_page = $(".pagination>.active");
-      target_active_page.removeClass("active");
-      target_active_page.next().addClass("active");
-      changePage(target_active_page.next().html());
+    if ($('.pagination>.active').next().is('li')) {
+      let target_active_page = $('.pagination>.active')
+      target_active_page.removeClass('active')
+      target_active_page.next().addClass('active')
+      changePage(target_active_page.next().html())
     }
   })
 
   //切換頁數內容
   function changePage(page) {
     var i, pagecontent
-    pagecontent = document.getElementsByClassName("pagecontent");
+    pagecontent = document.getElementsByClassName('pagecontent')
     // console.log(pagecontent);
     for (i = 0; i < pagecontent.length; i++) {
-      pagecontent[i].style.display = "none";
+      pagecontent[i].style.display = 'none'
     }
-    document.getElementById(page).style.display = "block";
+    document.getElementById(page).style.display = 'block'
     // evt.currentTarget.className += " active";
   }
-
-});
+})
 </script>
 
 <template>
@@ -76,8 +74,9 @@ onMounted(() => {
             <div class="addcar_item_text">
               <h1></h1>
               <div class="addcar_item_dollars">
-                $<p></p>
-                <p> &nbsp; x &nbsp;</p>
+                $
+                <p></p>
+                <p>&nbsp; x &nbsp;</p>
                 <p></p>
               </div>
               <p class="item_id"></p>
@@ -88,30 +87,40 @@ onMounted(() => {
         <router-link to="/CartView.vue" class="cart_pay">購物車結帳</router-link>
       </div>
 
-      <div id="aside-menu">
+      <!-- 手機板側邊欄按鈕 -->
+      <div id="aside-menu" @click="toggleAside" :class="{ active: isClicked }">
         <span class="top"></span>
         <span class="middle"></span>
         <span class="bottom"></span>
       </div>
 
       <!-- 側邊欄側邊欄側邊欄側邊欄側邊欄 -->
-      <aside class="aside">
+      <aside class="aside" :class="{ open: isClicked }">
         <ul>
-          <li class="tablinks" onclick="changeSet(event, 'all')" id="defaultOpen">全部商品</li>
+          <li @click="activeTab = 'AllItems'" :class="{ 'active': activeTab === 'AllItems' }">全部商品</li>
+
           <li class="tablinks" onclick="changeSet(event, 'season')" id="season_tab">季節限定商品</li>
           <li class="tablinks" onclick="changeSet(event, 'cupcake')" id="cupcake_tab">杯子蛋糕系列</li>
           <li class="tablinks" onclick="changeSet(event, 'tart')" id="tart_tab">小塔系列</li>
           <li class="tablinks" onclick="changeSet(event, 'choux')" id="choux_tab">泡芙系列</li>
+
+
+          <!-- <li class="tablinks" onclick="changeSet(event, 'all')" id="defaultOpen">全部商品</li>
+          <li class="tablinks" onclick="changeSet(event, 'season')" id="season_tab">季節限定商品</li>
+          <li class="tablinks" onclick="changeSet(event, 'cupcake')" id="cupcake_tab">杯子蛋糕系列</li>
+          <li class="tablinks" onclick="changeSet(event, 'tart')" id="tart_tab">小塔系列</li>
+          <li class="tablinks" onclick="changeSet(event, 'choux')" id="choux_tab">泡芙系列</li> -->
+
         </ul>
       </aside>
 
-      <!--商品欄/全部商品 -->
-      <div class="inner_block tabcontent" id="all">
 
+
+      <!--商品欄/草莓季限定 -->
+      <div class="inner_block tabcontent" id="season">
         <!-- 分類標題 -->
         <div class="title">
-          <h1> － 全部商品 －</h1>
-
+          <h1>－ 草莓季限定 －</h1>
         </div>
 
         <!-- 商品區塊第一頁 -->
@@ -126,7 +135,7 @@ onMounted(() => {
               </router-link>
               <div class="text_block">
                 <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
+                <p class="item_id" style="display: none">圓塔</p>
                 <div class="cash">
                   <p class="dollars">$199</p>
                   <i class="fa-solid fa-cart-shopping"></i>
@@ -143,177 +152,7 @@ onMounted(() => {
               </router-link>
               <div class="text_block">
                 <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none;">圓塔</p>
+                <p class="item_id" style="display: none">圓塔</p>
                 <div class="cash">
                   <p class="dollars">$199</p>
                   <i class="fa-solid fa-cart-shopping"></i>
@@ -323,256 +162,6 @@ onMounted(() => {
             </li>
           </ul>
         </div>
-
-        <!-- 商品區塊第二頁 -->
-        <!-- <div class="items_block pagecontent" id="2">
-          <ul>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/tart (24).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Tart</h3>
-                <p class="item_id" style="display: none;">草莓塔</p>
-                <div class="cash">
-                  <p class="dollars">$250</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/tart (22).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Pistache Tart</h3>
-                <p class="item_id" style="display: none;">草莓開心果塔</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (5).jpg" alt="">
-                  <div class="add">加入購物車 </div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Cup Cake</h3>
-                <p class="item_id" style="display: none;">草莓杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$250</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/macaron (6).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Heart Macaron</h3>
-                <p class="item_id" style="display: none;">草莓愛心馬卡龍</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/mousse (13).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Charlotte</h3>
-                <p class="item_id" style="display: none;">草莓夏洛特</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (1).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Mint Chocolate Cup Cake</h3>
-                <p class="item_id" style="display: none;">薄荷巧克力杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (6).jpg" alt="">
-                  <div class="add">加入購物車 </div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Oreo Cup Cake</h3>
-                <p class="item_id" style="display: none;">Oreo杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$250</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (7).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Caramel Cup Cake</h3>
-                <p class="item_id" style="display: none;">焦糖煎餅杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (8).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Red Velvet Cup Cake</h3>
-                <p class="item_id" style="display: none;">紅絲絨杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (11).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Chocolate Cup Cake</h3>
-                <p class="item_id" style="display: none;">特濃巧克力杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$220</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (10).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Carrot Cup Cake</h3>
-                <p class="item_id" style="display: none;">胡蘿蔔杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (12).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Brownie Cup Cakes</h3>
-                <p class="item_id" style="display: none;">布朗尼杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div> -->
-
-        <!-- 商品區塊第三頁 -->
-        <!-- <div class="items_block pagecontent" id="3">
-          <ul>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/choux (3).png" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Pistache Choux</h3>
-                <p class="item_id" style="display: none;">開心果泡芙</p>
-                <div class="cash">
-                  <p class="dollars">$220</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/choux (9).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Creme Diplomat Choux</h3>
-                <p class="item_id" style="display: none;">香草卡士達泡芙</p>
-                <div class="cash">
-                  <p class="dollars">$220</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div> -->
 
         <!-- 切換頁數區塊 -->
         <ul class="pagination">
@@ -586,11 +175,11 @@ onMounted(() => {
         </ul>
       </div>
 
-      <!--手機才有的遮罩-->
-      <div id="mask"></div>
-      <!--手機才有的遮罩(herder的)-->
-      <div id="common_mask"></div>
 
+      <!--手機才有的遮罩(側邊欄的)-->
+      <div id="mask" v-show="isClicked" @click="toggleAside()"></div>
+      <!--手機才有的遮罩(herder的)-->
+      <div id="common_mask" v-show="common.isMask" @click="common.toggleMask()"></div>
     </main>
     <FooterView />
   </div>
@@ -612,13 +201,13 @@ onMounted(() => {
     font-weight: 300;
   }
 
-  //  -----加入購物車小圖---- 
+  //  -----加入購物車小圖----
   .addcar_item {
     position: fixed;
     top: 60px;
     right: 0;
     transform: translateX(350px);
-    transition: all .5s;
+    transition: all 0.5s;
     background-color: white;
     z-index: 10;
 
@@ -660,7 +249,7 @@ onMounted(() => {
           flex-grow: 2;
           margin-left: 20px;
           line-height: 22px;
-          font-size: .8rem;
+          font-size: 0.8rem;
 
           h1 {
             color: black;
@@ -691,7 +280,6 @@ onMounted(() => {
         color: white;
       }
     }
-
   }
 
   //  -------側邊欄---------
@@ -706,8 +294,8 @@ onMounted(() => {
       position: absolute;
       top: 0;
       transform: translateX(-500px);
-      transition: all .5s;
-      z-index: 1;
+      transition: all 0.5s;
+      z-index: 7;
     }
 
     ul {
@@ -735,7 +323,6 @@ onMounted(() => {
         background-color: $secondary_color;
         color: white;
       }
-
     }
   }
 
@@ -754,7 +341,7 @@ onMounted(() => {
     position: relative;
     position: fixed;
     right: 0;
-    z-index: 1;
+    z-index: 6;
     display: none;
 
     @include pad {
@@ -774,31 +361,28 @@ onMounted(() => {
       position: absolute;
       top: 18px;
       right: 13px;
-      transition: all .35s ease;
+      transition: all 0.35s ease;
 
       &:nth-of-type(2) {
-        top: 28px
+        top: 28px;
       }
 
       &:nth-of-type(3) {
         top: 38px;
       }
     }
-
   }
 
-  #aside-menu.active {
-    .top {
-      transform: translateY(10px) translateX(0) rotate(45deg);
-    }
+  .active .top {
+    transform: translateY(10px) translateX(0) rotate(45deg);
+  }
 
-    .middle {
-      opacity: 0;
-    }
+  .active .middle {
+    opacity: 0;
+  }
 
-    .bottom {
-      transform: translateY(-10px) translateX(0) rotate(-45deg);
-    }
+  .active .bottom {
+    transform: translateY(-10px) translateX(0) rotate(-45deg);
   }
 
   .inner_block {
@@ -916,10 +500,8 @@ onMounted(() => {
                   display: block;
                   @include flexbox-center;
                 }
-
               }
             }
-
           }
 
           &:hover {

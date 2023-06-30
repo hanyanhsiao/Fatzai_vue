@@ -1,22 +1,21 @@
 <script setup>
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { EffectFade, Autoplay } from "swiper";
-import "swiper/css";
-import "swiper/css/effect-fade";
-import "swiper/css/autoplay";
-const modules = [EffectFade, Autoplay];
-const fade = 'fade';
+import { Swiper, SwiperSlide } from 'swiper/vue'
+import { EffectFade, Autoplay } from 'swiper'
+import 'swiper/css'
+import 'swiper/css/effect-fade'
+import 'swiper/css/autoplay'
+const modules = [EffectFade, Autoplay]
+const fade = 'fade'
 // const fadeEffect = {
 //     crossFade: true
 // }
 const autoplay = {
     delay: 1000
 }
-
 </script>
 <template>
     <section class="banner">
-        <swiper class="banner_img" :modules="modules" :effect="fade" :autoplay="autoplay" :speed="'1500'">
+        <swiper class="banner_img" :modules="modules" :effect="fade" :autoplay="autoplay" :speed="1500">
             <swiper-slide>
                 <img src="../assets/image/banner/banner2.jpg" alt="banner2" />
             </swiper-slide>
@@ -36,8 +35,7 @@ const autoplay = {
         <div class="banner_left">
             <img src="../assets/image/banner/banner0.png" alt="banner0" />
         </div>
-        <div class="banner_title" data-aos="fade-left" data-aos-anchor="#example-anchor" data-aos-offset="500"
-            data-aos-duration="500">
+        <div class="banner_title" data-aos="fade-left" data-aos-anchor="#example-anchor" data-aos-offset="500" data-aos-duration="500">
             <h1>FATZAI</h1>
             <h1>Pâtisserie</h1>
             <h1>法 式 甜 點 專 賣</h1>
@@ -95,7 +93,7 @@ const autoplay = {
         }
 
         h1 {
-            font-family: "Noto Serif TC", serif;
+            font-family: 'Noto Serif TC', serif;
             text-align: center;
             font-size: 1.6rem;
             font-weight: 500;

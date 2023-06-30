@@ -8,26 +8,23 @@ $icon_color: rgb(97, 97, 97);
 $page-width: 1100px;
 
 @mixin flexbox-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 // @include flexbox-center;
 
-
 @mixin pad {
-  @media (max-width: 768px) {
-    @content;
-  }
+    @media (max-width: 768px) {
+        @content;
+    }
 }
 
 // @include pad {}
 // @include mobile {}
 
 @mixin mobile {
-  @media (max-width: 540px) {
-    @content;
-  }
+    @media (max-width: 540px) {
+        @content;
+    }
 }
-
-

@@ -1,73 +1,73 @@
-@import "https://fonts.googleapis.com/earlyaccess/notosanstc.css";
+@import 'https://fonts.googleapis.com/earlyaccess/notosanstc.css';
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: "Noto Sans TC", sans-serif;
-  font-weight: 200;
-  margin: 0 auto;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 200;
+    margin: 0 auto;
 }
 
 /* "Noto Serif TC" */
 html {
-  font-size: 18px;
-  @include mobile {
-    font-size: 16px;
-    font-weight: 300;
-  }
+    font-size: 18px;
+    @include mobile {
+        font-size: 16px;
+        font-weight: 300;
+    }
 }
 
-main{
-  @include pad {
-    position: relative;
-  }
+main {
+    @include pad {
+        position: relative;
+    }
 }
 
 button,
 a {
-  font-family: inherit;
-  font-weight: inherit;
-  font-size: inherit;
-  text-decoration: none;
-  color: black;
-  border: 0;
-  cursor: pointer;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    text-decoration: none;
+    color: black;
+    border: 0;
+    cursor: pointer;
 }
 
 p {
-  text-align: justify;
-  line-height: 1.8;
-  letter-spacing: 1px;
+    text-align: justify;
+    line-height: 1.8;
+    letter-spacing: 1px;
 }
 
-i{
-  @include flexbox-center;
-  cursor: pointer;
+i {
+    @include flexbox-center;
+    cursor: pointer;
 }
 
 //---------------標題-----------------
 .title {
-  /* border: 2px solid rgb(0, 21, 255); */
-  font-size: 1.5rem;
-  font-weight: 400;
-  letter-spacing: 0.5rem;
-  color: $fourth_color;
-  text-align: center;
-  padding-bottom: 50px;
-  @include pad {
-    padding-bottom: 20px;
-  }
+    /* border: 2px solid rgb(0, 21, 255); */
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.5rem;
+    color: $fourth_color;
+    text-align: center;
+    padding-bottom: 50px;
+    @include pad {
+        padding-bottom: 20px;
+    }
 }
 
 /*--------------分隔線----------------*/
 .hr {
-  max-width: $page-width;
-  margin: 0 auto;
-  padding-top: 2px;
-  border: $secondary_color;
-  background: linear-gradient(to right, transparent, $secondary_color, transparent);
+    max-width: $page-width;
+    margin: 0 auto;
+    padding-top: 2px;
+    border: $secondary_color;
+    background: linear-gradient(to right, transparent, $secondary_color, transparent);
 }
 
 /*--------------遮罩----------------*/
@@ -82,6 +82,9 @@ i{
     width: 100%;
     height: 100%;
     display: none;
-    // z-index: 10;
+    z-index: 5;
     cursor: pointer;
+    @include pad{
+        display: block;
+    }
 }

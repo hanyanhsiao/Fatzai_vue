@@ -1,27 +1,32 @@
 <script setup>
-import $ from "jquery";
-import { onMounted } from "vue";
+// import $ from "jquery";
+import { onMounted } from 'vue'
+import { useCommonStore } from '@/stores/common'
+
+const common = useCommonStore()
+
+//  選單 
+const menuItems = [
+  { id: 1, label: '關於Fatzai', to: '/AboutView' },
+  { id: 2, label: '最新消息', to: '/NewsView' },
+  { id: 3, label: '產品列表', to: '/ItemList' },
+  { id: 4, label: '會員專區', to: '/MemberCenter' },
+  { id: 5, label: '購物車', to: '/CartView' }
+]
 
 onMounted(() => {
-  $("#mobile-menu").click(function () {
-    $(".nav_list").toggleClass("active");
-    $("#common_mask").toggle();
-  });
-  //點擊黑色遮罩也能收合
-  $('#common_mask').click(function () {
-    $('#mobile-menu').click()
-  });
   // 點擊當頁加上顏色
-  var currentUrl = window.location.href.split("/");
-  var links = document.querySelectorAll(".nav_list a");
+  var currentUrl = window.location.href.split('/');
+  var links = document.querySelectorAll('.nav_list a');
   links.forEach(function (link) {
-    var href = link.getAttribute("href").split("/");
+    var href = link.getAttribute('href').split('/');
     if (href[1] === currentUrl[4]) {
       // link.style.color = "#CCC";
-      link.style.fontWeight = "500";
+      link.style.fontWeight = '500';
     }
-  });
-});
+  })
+})
+
 </script>
 
 <template>
@@ -47,28 +52,18 @@ onMounted(() => {
         </router-link>
 
         <!-- 手機才出現的漢堡 -->
-        <div id="mobile-menu">
+        <div id="mobile-menu" @click="common.toggleMask()" :class="{ active: common.isMask }">
           <span class="top"></span>
           <span class="middle"></span>
           <span class="bottom"></span>
         </div>
+
         <!-- 選單 -->
-        <!-- <slide-up-down :active="active" :duration="1000"> -->
-        <ul class="nav_list">
-          <li><router-link to="/AboutView">關於Fatzai</router-link></li>
-          <li><router-link to="/NewsView">最新消息</router-link></li>
-          <li><router-link to="/ItemList">產品列表</router-link></li>
-          <li><router-link to="/MemberCenter">會員專區</router-link></li>
-          <li>
-            <router-link to="/CartView">購物車
-              <lord-icon class="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
-                colors="primary:#545454,secondary:#545454" style="width: 30px; height: 30px" />
-              <span class="cart_num num_active"></span>
-            </router-link>
+        <ul class="nav_list" :class="{ active: common.isMask }">
+          <li v-for="item in menuItems" :key="item.id">
+            <router-link :to="item.to">{{ item.label }}</router-link>
           </li>
         </ul>
-
-        <!-- </slide-up-down> -->
       </div>
     </nav>
   </header>
@@ -120,7 +115,7 @@ onMounted(() => {
           flex-direction: column;
           width: 100%;
           height: 0;
-          transition: all 0.5s ease-in-out;
+          transition: all 0.4s ease-in-out;
         }
 
         li {

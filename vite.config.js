@@ -16,7 +16,14 @@ export default defineConfig({
       "windows.jQuery": "jquery"
 
     }),
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          // treat all tags with a dash as custom elements
+          isCustomElement: (tag) => tag.includes('lord-icon')
+        }
+      }
+    }),
     eslintPlugin({
       include: ['src/**/*.js', 'src/**/*.vue', 'src/*.js', 'src/*.vue']
     }),
