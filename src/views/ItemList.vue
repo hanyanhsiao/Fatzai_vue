@@ -5,8 +5,12 @@ import $ from 'jquery'
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 import { useCommonStore } from '@/stores/common'
-// import AllItems from '../components/AllItems.vue'
+import AllItems from '../components/AllItems.vue'
+import SeasonItems from '../components/SeasonItems.vue'
+import CupcakeItems from '../components/CupcakeItems.vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const common = useCommonStore()
 
 const isClicked = ref(false);
@@ -17,6 +21,10 @@ const toggleAside = () => {
 let activeTab = ref('AllItems');
 
 onMounted(() => {
+
+  // const productParam = route.query || {};
+  // if (productParam.product)
+  //   activeTab.value = productParam.product
 
   //分頁器
   $('.pagination li:first').addClass('active')
@@ -97,13 +105,10 @@ onMounted(() => {
       <!-- 側邊欄側邊欄側邊欄側邊欄側邊欄 -->
       <aside class="aside" :class="{ open: isClicked }">
         <ul>
-          <li @click="activeTab = 'AllItems'" :class="{ 'active': activeTab === 'AllItems' }">全部商品</li>
-
-          <li class="tablinks" onclick="changeSet(event, 'season')" id="season_tab">季節限定商品</li>
-          <li class="tablinks" onclick="changeSet(event, 'cupcake')" id="cupcake_tab">杯子蛋糕系列</li>
-          <li class="tablinks" onclick="changeSet(event, 'tart')" id="tart_tab">小塔系列</li>
-          <li class="tablinks" onclick="changeSet(event, 'choux')" id="choux_tab">泡芙系列</li>
-
+          <li @click="activeTab = 'AllItems'; console.log(route.query)" :class="{ 'active': activeTab === 'AllItems' }">
+            全部商品</li>
+          <li @click="activeTab = 'SeasonItems'" :class="{ 'active': activeTab === 'SeasonItems' }">季節限定</li>
+          <li @click="activeTab = 'CupcakeItems'" :class="{ 'active': activeTab === 'CupcakeItems' }">杯子蛋糕系列</li>
 
           <!-- <li class="tablinks" onclick="changeSet(event, 'all')" id="defaultOpen">全部商品</li>
           <li class="tablinks" onclick="changeSet(event, 'season')" id="season_tab">季節限定商品</li>
@@ -114,66 +119,11 @@ onMounted(() => {
         </ul>
       </aside>
 
+      <AllItems v-if="activeTab === 'AllItems'" />
+      <SeasonItems v-if="activeTab === 'SeasonItems'" />
+      <CupcakeItems v-if="activeTab === 'CupcakeItems'" />
 
 
-      <!--商品欄/草莓季限定 -->
-      <div class="inner_block tabcontent" id="season">
-        <!-- 分類標題 -->
-        <div class="title">
-          <h1>－ 草莓季限定 －</h1>
-        </div>
-
-        <!-- 商品區塊第一頁 -->
-        <div class="items_block pagecontent" id="1">
-          <ul>
-            <li>
-              <router-link to="./ItemView">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <router-link to="./ItemView.vue">
-                <div class="img_block">
-                  <img src="../assets/image/items/tart1.jpg" alt="" />
-                  <div class="add">加入購物車</div>
-                </div>
-              </router-link>
-              <div class="text_block">
-                <h3 class="item_name">Tiramisu Tart</h3>
-                <p class="item_id" style="display: none">圓塔</p>
-                <div class="cash">
-                  <p class="dollars">$199</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!-- 切換頁數區塊 -->
-        <ul class="pagination">
-          <span class="previous_page">«</span>
-          <li class="pagetabs" onclick="changePage('1')" id="defaultOpenPage">1</li>
-          <li class="pagetabs" onclick="changePage('2')">2</li>
-          <li class="pagetabs" onclick="changePage('3')">3</li>
-          <!-- <li class="pagetabs" onclick="changePage(event, '4')">4</li>
-                    <li class="pagetabs" onclick="changePage(event, '5')">5</li> -->
-          <span class="next_page">»</span>
-        </ul>
-      </div>
 
 
       <!--手機才有的遮罩(側邊欄的)-->

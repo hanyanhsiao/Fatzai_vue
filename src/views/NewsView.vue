@@ -65,7 +65,7 @@ const calendarOptions = {
                     </div>
                     <div class="btn_block">
                         <button>
-                            <router-link :to="{ path: '/ItemList', query: { product: 'cupcake_tab' } }">立即購買</router-link>
+                            <router-link :to="{ path: '/ItemList', query: { product: 'CupcakeItems' } }">立即購買</router-link>
                         </button>
                     </div>
                 </div>
@@ -82,7 +82,7 @@ const calendarOptions = {
                     <div class="btn_block">
                         <button>
                             <!-- <a href="./shop_list_all.html?product=season_tab">立即購買</a> -->
-                            <router-link :to="{ path: '/ItemList', query: { product: 'season_tab' } }">立即購買</router-link>
+                            <router-link :to="{ path: '/ItemList', query: { product: 'SeasonItems' } }">立即購買</router-link>
                         </button>
                     </div>
                 </div>

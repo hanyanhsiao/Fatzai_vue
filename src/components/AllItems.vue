@@ -1,3 +1,23 @@
+
+<script setup>
+const items = [
+    {
+        id: 1,
+        name: 'Tiramisu Tart',
+        category: '圓塔',
+        price: 199,
+        image: 'src/assets/image/items/tart1.jpg'
+    },
+    {
+        id: 2,
+        name: 'Pistache Mousse',
+        category: '慕斯',
+        price: 180,
+        image: 'src/assets/image/items/mousse8.jpg'
+    },
+]
+</script>
+
 <template>
     <!--商品欄/全部商品 -->
     <div class="inner_block tabcontent" id="all">
@@ -9,205 +29,18 @@
         <!-- 商品區塊第一頁 -->
         <div class="items_block pagecontent" id="1">
             <ul>
-                <li>
-                    <router-link to="./ItemView">
+                <li v-for="item in items" :key="item.id">
+                    <router-link :to="`./ItemView/${item.id}`">
                         <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
+                            <img :src="item.image" :alt="''" />
                             <div class="add">加入購物車</div>
                         </div>
                     </router-link>
                     <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
+                        <h3 class="item_name">{{ item.name }}</h3>
+                        <p class="item_id" style="display: none">{{ item.category }}</p>
                         <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
-                            <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <router-link to="./ItemView.vue">
-                        <div class="img_block">
-                            <img src="../assets/image/items/tart1.jpg" alt="" />
-                            <div class="add">加入購物車</div>
-                        </div>
-                    </router-link>
-                    <div class="text_block">
-                        <h3 class="item_name">Tiramisu Tart</h3>
-                        <p class="item_id" style="display: none">圓塔</p>
-                        <div class="cash">
-                            <p class="dollars">$199</p>
+                            <p class="dollars">${{ item.price }}</p>
                             <i class="fa-solid fa-cart-shopping"></i>
                             <i class="fa-regular fa-heart"></i>
                         </div>
@@ -467,17 +300,18 @@
         </div> -->
 
         <!-- 切換頁數區塊 -->
-        <!-- <ul class="pagination">
+        <ul class="pagination">
             <span class="previous_page">«</span>
             <li class="pagetabs" onclick="changePage('1')" id="defaultOpenPage">1</li>
             <li class="pagetabs" onclick="changePage('2')">2</li>
             <li class="pagetabs" onclick="changePage('3')">3</li>
-            <li class="pagetabs" onclick="changePage(event, '4')">4</li>
-            <li class="pagetabs" onclick="changePage(event, '5')">5</li>
+            <!-- <li class="pagetabs" onclick="changePage(event, '4')">4</li>
+            <li class="pagetabs" onclick="changePage(event, '5')">5</li> -->
             <span class="next_page">»</span>
-        </ul> -->
+        </ul>
     </div>
 </template>
+
 <style lang="scss" scoped>
 .inner_block {
     // outline: 2px solid rgb(0, 0, 0);
