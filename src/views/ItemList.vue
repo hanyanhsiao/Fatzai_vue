@@ -5,10 +5,11 @@ import $ from 'jquery'
 import { ref } from 'vue'
 import { onMounted } from 'vue'
 import { useCommonStore } from '@/stores/common'
-import AllItems from '../components/AllItems.vue'
-import SeasonItems from '../components/SeasonItems.vue'
-import CupcakeItems from '../components/CupcakeItems.vue'
+// import AllItems from '../components/AllItems.vue'
+// import SeasonItems from '../components/SeasonItems.vue'
+// import CupcakeItems from '../components/CupcakeItems.vue'
 import { useRoute } from 'vue-router'
+import TotalItems from '../components/TotalItems.vue'
 
 
 
@@ -114,6 +115,8 @@ onMounted(() => {
             全部商品</li>
           <li @click="activeTab = 'SeasonItems'" :class="{ 'active': activeTab === 'SeasonItems' }">季節限定</li>
           <li @click="activeTab = 'CupcakeItems'" :class="{ 'active': activeTab === 'CupcakeItems' }">杯子蛋糕系列</li>
+          <li @click="activeTab = 'TartItems'" :class="{ 'active': activeTab === 'TartItems' }">小塔系列</li>
+          <li @click="activeTab = 'ChouxItems'" :class="{ 'active': activeTab === 'ChouxItems' }">泡芙系列</li>
 
           <!-- <li class="tablinks" onclick="changeSet(event, 'all')" id="defaultOpen">全部商品</li>
           <li class="tablinks" onclick="changeSet(event, 'season')" id="season_tab">季節限定商品</li>
@@ -124,9 +127,11 @@ onMounted(() => {
         </ul>
       </aside>
 
-      <AllItems v-if="activeTab === 'AllItems'" />
+
+      <TotalItems :category="activeTab" />
+      <!-- <AllItems v-if="activeTab === 'AllItems'" />
       <SeasonItems v-if="activeTab === 'SeasonItems'" />
-      <CupcakeItems v-if="activeTab === 'CupcakeItems'" />
+      <CupcakeItems v-if="activeTab === 'CupcakeItems'" /> -->
 
 
 

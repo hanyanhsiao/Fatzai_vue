@@ -258,20 +258,18 @@ const calendarOptions = {
                     text-align: center;
                     box-shadow: 2px 2px 2px $secondary_color;
                     border-radius: 5px;
-                    padding: 0 15px;
 
                     &:hover {
                         color: $secondary_color;
                         transform: scale(1.1);
                     }
 
-                    // a {
-                    //   line-height: 50px;
-                    //   text-align: center;
-                    //   display: block;
-                    //   width: 100%;
-                    //   padding: 0 15px;
-                    // }
+                    a {
+                        line-height: 50px;
+                        display: block;
+                        padding: 0 15px;
+                        width: 100%;
+                    }
                 }
             }
 

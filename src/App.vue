@@ -15,6 +15,7 @@ export default {
 <template>
     <!-- router-link 在經過編譯後會變成 <a> 標籤 -->
     <!-- 使用 to 屬性來處理目標 URL -->
+    <!-- 顯示路由元件 -->
     <router-view />
 </template>
 

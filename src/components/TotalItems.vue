@@ -1,20 +1,124 @@
 <script setup>
-const items = [
+import { defineProps, toRefs, watch, ref } from 'vue';
+// onBeforeMount,
+const props = defineProps({
+  category: String,
+})
+
+// 從props解構為單獨的ref
+const { category } = toRefs(props);
+const title = ref('全部商品')
+// 產品分類
+const TotalItems = [
   {
-    id: 1,
-    name: 'Tiramisu Tart',
-    category: '圓塔',
-    price: 199,
-    image: 'src/assets/image/items/tart1.jpg'
+    id: 'SeasonItems',
+    name: '季節限定',
+    items: [
+      {
+        id: 1,
+        name: 'Tiramisu Tart',
+        category: '圓塔',
+        price: 199,
+        image: 'src/assets/image/items/tart1.jpg'
+      },
+      {
+        id: 2,
+        name: 'Pistache Mousse',
+        category: '慕斯',
+        price: 180,
+        image: 'src/assets/image/items/mousse8.jpg'
+      },
+    ]
+
   },
   {
-    id: 2,
-    name: 'Pistache Mousse',
-    category: '慕斯',
-    price: 180,
-    image: 'src/assets/image/items/mousse8.jpg'
+    id: 'CupcakeItems',
+    name: '杯子蛋糕系列',
+    items: [
+      {
+        id: 1,
+        name: 'CupcakeItems',
+        category: '圓塔',
+        price: 199,
+        image: 'src/assets/image/items/tart2.jpg'
+      },
+      {
+        id: 2,
+        name: 'CupcakeItems',
+        category: '慕斯',
+        price: 180,
+        image: 'src/assets/image/items/mousse11.jpg'
+      },
+    ]
+
+  },
+  {
+    id: 'TartItems',
+    name: '小塔系列',
+    items: [
+      {
+        id: 1,
+        name: 'TartItems',
+        category: '圓塔',
+        price: 199,
+        image: 'src/assets/image/items/tart4.jpg'
+      },
+      {
+        id: 2,
+        name: 'TartItems',
+        category: '慕斯',
+        price: 180,
+        image: 'src/assets/image/items/mousse7.jpg'
+      },
+    ]
+
+  },
+  {
+    id: 'ChouxItems',
+    name: '泡芙系列',
+    items: [
+      {
+        id: 1,
+        name: 'ChouxItems',
+        category: '圓塔',
+        price: 199,
+        image: 'src/assets/image/items/tart4.jpg'
+      },
+      {
+        id: 2,
+        name: 'ChouxItems',
+        category: '慕斯',
+        price: 180,
+        image: 'src/assets/image/items/mousse7.jpg'
+      },
+    ]
+
   },
 ]
+
+// 定義要放入的陣列
+let itemList = [];
+
+// 監看點到哪個類別
+watch(category, () => {
+  // 清空陣列
+  itemList.length = 0;
+  let filterArray = TotalItems.filter((eachCate) => {
+    return eachCate.id === category.value
+  });
+
+  if (filterArray.length == 0) {
+    TotalItems.forEach(eachCate => {
+      itemList.push(...eachCate.items);
+    });
+    title.value = "全部商品";
+  } else {
+    itemList.push(...filterArray[0].items);
+    title.value = filterArray[0].name;
+  }
+}, { immediate: true })
+// { immediate: true } 初始化立即執行回調函數
+
 </script>
 
 <template>
@@ -22,14 +126,14 @@ const items = [
   <div class="inner_block tabcontent" id="all">
     <!-- 分類標題 -->
     <div class="title">
-      <h1>－ 全部商品 －</h1>
+      <h1>－ {{ title }} －</h1>
     </div>
 
     <!-- 商品區塊第一頁 -->
     <div class="items_block pagecontent" id="1">
       <ul>
-        <li v-for="item in items" :key="item.id">
-          <router-link :to="`./ItemView/${item.id}`">
+        <li v-for="item in itemList" :key="item.id">
+          <router-link to="./ItemView">
             <div class="img_block">
               <img :src="item.image" :alt="''" />
               <div class="add">加入購物車</div>
