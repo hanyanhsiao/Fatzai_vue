@@ -111,6 +111,7 @@ const TotalItems = [
 // 定義要放入的陣列
 let itemList = []
 
+// 定義每一頁的個數、當前頁碼
 const onePage = ref(4)
 const currentPage = ref(1)
 const sliceItems = ref([])
@@ -120,8 +121,6 @@ const sliceItems = ref([])
 watch(
     category,
     () => {
-        // console.log('QQQQQ')
-
         // 清空陣列
         itemList.length = 0
 
@@ -138,28 +137,26 @@ watch(
             itemList.push(...filterArray[0].items)
             title.value = filterArray[0].name
         }
-        // changePage(1)
-        console.log(itemList.length)
-        sliceItems.value = slice()
-        // changeActiveState()
+        changePage(1)
+        console.log('產品總數' + itemList.length)
     },
     { immediate: true }
 )
+
+// 分割每頁要幾個產品
+function slice() {
+    // console.log('computed')
+    const start = (currentPage.value - 1) * onePage.value // (2-1)*4
+    const end = start + onePage.value //0+4 從4開始
+    return itemList.slice(start, end)
+}
 
 // -----------分頁器-------------------
 
 function changePage(currentNum) {
     currentPage.value = currentNum
-    console.log(currentPage.value)
-    // sliceItems.value = slice()
-}
-
-function slice() {
-    // console.log('computed')
-
-    const start = (currentPage.value - 1) * onePage.value // (2-1)*4
-    const end = start + onePage.value //0+4 從4開始
-    return itemList.slice(start, end)
+    console.log('當前頁碼' + currentPage.value)
+    sliceItems.value = slice()
 }
 </script>
 
@@ -171,7 +168,7 @@ function slice() {
             <h1>－ {{ title }} －</h1>
         </div>
 
-        <!-- 商品區塊第一頁 -->
+        <!-- 商品區塊 -->
         <div class="items_block pagecontent" id="1">
             <ul>
                 <li v-for="item in sliceItems" :key="item.id">
@@ -194,258 +191,8 @@ function slice() {
             </ul>
         </div>
 
-        <!-- 商品區塊第二頁 -->
-        <!-- <div class="items_block pagecontent" id="2">
-          <ul>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/tart (24).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Tart</h3>
-                <p class="item_id" style="display: none;">草莓塔</p>
-                <div class="cash">
-                  <p class="dollars">$250</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/tart (22).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Pistache Tart</h3>
-                <p class="item_id" style="display: none;">草莓開心果塔</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (5).jpg" alt="">
-                  <div class="add">加入購物車 </div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Cup Cake</h3>
-                <p class="item_id" style="display: none;">草莓杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$250</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/macaron (6).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Heart Macaron</h3>
-                <p class="item_id" style="display: none;">草莓愛心馬卡龍</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/mousse (13).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Strawberry Charlotte</h3>
-                <p class="item_id" style="display: none;">草莓夏洛特</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (1).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Mint Chocolate Cup Cake</h3>
-                <p class="item_id" style="display: none;">薄荷巧克力杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (6).jpg" alt="">
-                  <div class="add">加入購物車 </div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Oreo Cup Cake</h3>
-                <p class="item_id" style="display: none;">Oreo杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$250</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (7).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Caramel Cup Cake</h3>
-                <p class="item_id" style="display: none;">焦糖煎餅杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (8).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Red Velvet Cup Cake</h3>
-                <p class="item_id" style="display: none;">紅絲絨杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (11).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Chocolate Cup Cake</h3>
-                <p class="item_id" style="display: none;">特濃巧克力杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$220</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (10).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Carrot Cup Cake</h3>
-                <p class="item_id" style="display: none;">胡蘿蔔杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$200</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/cup cake (12).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Brownie Cup Cakes</h3>
-                <p class="item_id" style="display: none;">布朗尼杯子蛋糕</p>
-                <div class="cash">
-                  <p class="dollars">$190</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div> -->
-
-        <!-- 商品區塊第三頁 -->
-        <!-- <div class="items_block pagecontent" id="3">
-          <ul>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/choux (3).png" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Pistache Choux</h3>
-                <p class="item_id" style="display: none;">開心果泡芙</p>
-                <div class="cash">
-                  <p class="dollars">$220</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-            <li>
-              <a href="./item.html">
-                <div class="img_block">
-                  <img src="./image/items/choux (9).jpg" alt="">
-                  <div class="add">加入購物車</div>
-                </div>
-              </a>
-              <div class="text_block">
-                <h3 class="item_name">Creme Diplomat Choux</h3>
-                <p class="item_id" style="display: none;">香草卡士達泡芙</p>
-                <div class="cash">
-                  <p class="dollars">$220</p>
-                  <i class="fa-solid fa-cart-shopping"></i>
-                  <i class="fa-regular fa-heart"></i>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div> -->
-
         <!-- 分頁器 -->
-        <PagePlugin :total="itemList.length" :onePage="onePage" :currentPage="currentPage" @changePage="changePage" />
+        <PagePlugin :total="itemList.length" :onePage="onePage" :currentNum="currentPage" @changePage="changePage" />
     </div>
 </template>
 
