@@ -31,25 +31,23 @@ onMounted(() => {
                 <aside class="Member_Area_aside">
                     <div class="openMenu">
                         <span>選單</span>
-                        <lord-icon class="openMenu_arrow" src="https://cdn.lordicon.com/rvuqcvqy.json" trigger="loop"
-                            delay="500" colors="primary:#809ba8,secondary:#809ba8" style="width: 30px; height: 30px" />
+                        <lord-icon class="openMenu_arrow" src="https://cdn.lordicon.com/rvuqcvqy.json" trigger="loop" delay="500" colors="primary:#809ba8,secondary:#809ba8" style="width: 30px; height: 30px" />
                     </div>
                     <ul class="Member_Area_menu">
-                        <li class="tablinks" onclick="changeSet(event, 'myAccount')" id="defaultOpen">我的帳戶</li>
-                        <li class="tablinks" onclick="changeSet(event, 'personal')" id="personal_tab">修改個人資訊</li>
-                        <li class="tablinks" onclick="changeSet(event, 'order')" id="order_tab">訂單查詢</li>
-                        <li class="tablinks" onclick="changeSet(event, 'coupon')" id="coupon_tab">我的優惠券</li>
-                        <li class="tablinks" onclick="changeSet(event, 'favoritelist')" id="favoritelist_tab">
+                        <li id="defaultOpen" class="tablinks" onclick="changeSet(event, 'myAccount')">我的帳戶</li>
+                        <li id="personal_tab" class="tablinks" onclick="changeSet(event, 'personal')">修改個人資訊</li>
+                        <li id="order_tab" class="tablinks" onclick="changeSet(event, 'order')">訂單查詢</li>
+                        <li id="coupon_tab" class="tablinks" onclick="changeSet(event, 'coupon')">我的優惠券</li>
+                        <li id="favoritelist_tab" class="tablinks" onclick="changeSet(event, 'favoritelist')">
                             <div class="aside_favorite">
                                 收藏清單
-                                <lord-icon src="https://cdn.lordicon.com/pnhskdva.json" trigger="loop" delay="1000"
-                                    colors="primary:#dc9f58" style="width: 28px; height: 28px" />
+                                <lord-icon src="https://cdn.lordicon.com/pnhskdva.json" trigger="loop" delay="1000" colors="primary:#dc9f58" style="width: 28px; height: 28px" />
                             </div>
                         </li>
                     </ul>
                 </aside>
 
-                <section class="tabcontent" id="myAccount">
+                <section id="myAccount" class="tabcontent">
                     <!-- 右側上半部會員資訊 -->
                     <div class="Member_information">
                         <div class="personal_inf">
@@ -146,7 +144,7 @@ onMounted(() => {
                 <!-- <section class="tabcontent" id="personal">修改個人資訊</section>
         <section class="tabcontent" id="order">訂單查詢</section>
         <section class="tabcontent" id="coupon">我的優惠券</section> -->
-                <section class="tabcontent" id="favoritelist">
+                <section id="favoritelist" class="tabcontent">
                     <div class="favorite_block">
                         <!-- <ul class="favorite_list">
                         <li class="img"><a href="./item.html"><img src="" alt=""></a></li>
@@ -170,7 +168,7 @@ onMounted(() => {
                 </section>
             </div>
             <!--手機才有的遮罩-->
-            <div id="common_mask" v-show="common.isMask" @click="common.toggleMask()"></div>
+            <div v-show="common.isMask" id="common_mask" @click="common.toggleMask()"></div>
         </main>
         <FooterView />
     </div>
@@ -178,7 +176,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .member_center {
-
     // 會員專區標題
     .Member_Area {
         height: 250px;
