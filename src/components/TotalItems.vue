@@ -138,10 +138,10 @@ watch(
             itemList.push(...filterArray[0].items)
             title.value = filterArray[0].name
         }
-        currentPage.value = 1
-        changePage(currentPage.value)
+        // changePage(1)
         console.log(itemList.length)
         sliceItems.value = slice()
+        // changeActiveState()
     },
     { immediate: true }
 )

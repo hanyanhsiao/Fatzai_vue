@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onUpdated } from 'vue'
 
 // 定義總數量、每一頁的個數、當前頁碼
 const props = defineProps({
@@ -40,6 +40,14 @@ function changePage(type) {
     }
     emit('changePage', currentNum.value)
 }
+
+onUpdated(() => {
+    const pagination = document.querySelector('.pagination')
+    if (pagination) {
+        const pageItems = pagination.querySelectorAll('li')
+        pageItems[0].classList.add('active')
+    }
+})
 </script>
 
 <template>
