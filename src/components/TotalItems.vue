@@ -28,7 +28,7 @@ const TotalItems = [
                 name: 'Pistache Mousse',
                 category: '慕斯',
                 price: 180,
-                image: 'src/assets/image/items/mousse8.jpg'
+                image: 'src/assets/image/items/mousse2.jpg'
             },
             {
                 id: 3,
@@ -43,6 +43,27 @@ const TotalItems = [
                 category: '慕斯',
                 price: 180,
                 image: 'src/assets/image/items/mousse10.jpg'
+            },
+            {
+                id: 5,
+                name: 'Pistache Pistache',
+                category: '慕斯',
+                price: 180,
+                image: 'src/assets/image/items/mousse12.jpg'
+            },
+            {
+                id: 6,
+                name: 'Pistache Pistache',
+                category: '慕斯',
+                price: 180,
+                image: 'src/assets/image/items/mousse8.jpg'
+            },
+            {
+                id: 6,
+                name: 'Pistache Pistache',
+                category: '慕斯',
+                price: 180,
+                image: 'src/assets/image/items/mousse5.jpg'
             }
         ]
     },
@@ -51,14 +72,14 @@ const TotalItems = [
         name: '杯子蛋糕系列',
         items: [
             {
-                id: 1,
+                id: 7,
                 name: 'CupcakeItems',
                 category: '圓塔',
                 price: 199,
                 image: 'src/assets/image/items/tart2.jpg'
             },
             {
-                id: 2,
+                id: 8,
                 name: 'CupcakeItems',
                 category: '慕斯',
                 price: 180,
@@ -71,14 +92,14 @@ const TotalItems = [
         name: '小塔系列',
         items: [
             {
-                id: 1,
+                id: 9,
                 name: 'TartItems',
                 category: '圓塔',
                 price: 199,
                 image: 'src/assets/image/items/tart4.jpg'
             },
             {
-                id: 2,
+                id: 10,
                 name: 'TartItems',
                 category: '慕斯',
                 price: 180,
@@ -91,14 +112,14 @@ const TotalItems = [
         name: '泡芙系列',
         items: [
             {
-                id: 1,
+                id: 11,
                 name: 'ChouxItems',
                 category: '圓塔',
                 price: 199,
                 image: 'src/assets/image/items/tart4.jpg'
             },
             {
-                id: 2,
+                id: 12,
                 name: 'ChouxItems',
                 category: '慕斯',
                 price: 180,
@@ -112,7 +133,7 @@ const TotalItems = [
 let itemList = []
 
 // 定義每一頁的個數、當前頁碼
-const onePage = ref(4)
+const onePage = ref(6)
 const currentPage = ref(1)
 const sliceItems = ref([])
 
@@ -145,7 +166,6 @@ watch(
 
 // 分割每頁要幾個產品
 function slice() {
-    // console.log('computed')
     const start = (currentPage.value - 1) * onePage.value // (2-1)*4
     const end = start + onePage.value //0+4 從4開始
     return itemList.slice(start, end)
@@ -158,8 +178,22 @@ function changePage(currentNum) {
     console.log('當前頁碼' + currentPage.value)
     sliceItems.value = slice()
 }
+
+// -----------加入收藏-----------------
+function toggleHeart(item) {
+    item.isFilled = !item.isFilled
+}
+
+// -----------加入購物車-----------------
+const emit = defineEmits(['addCart'])
+function addCart(item) {
+    item.num = 1
+    emit('addCart', item)
+    // console.log("加入的產品"+item)
+}
 </script>
 
+<!-- ==================template===================== -->
 <template>
     <!--商品欄/全部商品 -->
     <div class="inner_block tabcontent" id="all">
@@ -171,11 +205,12 @@ function changePage(currentNum) {
         <!-- 商品區塊 -->
         <div class="items_block pagecontent" id="1">
             <ul>
+                <!-- <li v-for="(item, index) in sliceItems" :key="index"> -->
                 <li v-for="item in sliceItems" :key="item.id">
                     <router-link to="./ItemView">
                         <div class="img_block">
                             <img :src="item.image" :alt="''" />
-                            <div class="add">加入購物車</div>
+                            <div class="add" @click.prevent="addCart(item)">加入購物車</div>
                         </div>
                     </router-link>
                     <div class="text_block">
@@ -184,7 +219,7 @@ function changePage(currentNum) {
                         <div class="cash">
                             <p class="dollars">${{ item.price }}</p>
                             <i class="fa-solid fa-cart-shopping"></i>
-                            <i class="fa-regular fa-heart"></i>
+                            <i class="fa-heart" :class="{ 'fa-regular': !item.isFilled, 'fa-solid': item.isFilled }" @click="toggleHeart(item)"></i>
                         </div>
                     </div>
                 </li>
@@ -196,6 +231,7 @@ function changePage(currentNum) {
     </div>
 </template>
 
+<!-- ==================scss===================== -->
 <style lang="scss" scoped>
 .inner_block {
     // outline: 2px solid rgb(0, 0, 0);

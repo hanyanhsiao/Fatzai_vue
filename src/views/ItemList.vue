@@ -2,12 +2,11 @@
 import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
 // import $ from 'jquery'
-import { ref } from 'vue'
-import { onMounted } from 'vue'
-import { useCommonStore } from '@/stores/common'
+import { ref, onMounted } from 'vue'
+import { useCommonStore, CartStore } from '@/stores/common'
 import { useRoute } from 'vue-router'
 import TotalItems from '../components/TotalItems.vue'
-
+import addCart from '../components/addCart.vue'
 const route = useRoute()
 const common = useCommonStore()
 
@@ -26,6 +25,32 @@ onMounted(() => {
         activeTab.value = productParam.product
     }
 })
+
+// ===============加入購物車小圖===================
+
+const addToCart = CartStore()
+
+function showCart(item) {
+    // console.log(item)
+    const addCarItem = document.querySelector('.addcar_item')
+    addCarItem.classList.add('fadeInRight')
+    // 呼叫計時器
+    setTimer(2000)
+    addToCart.addCartItem(item)
+}
+// 儲存計時器
+const timer = ref(null)
+// 移除fadeInRight，向右收回
+const task = () => {
+    const element = document.querySelector('.addcar_item')
+    element.classList.remove('fadeInRight')
+}
+const setTimer = delay => {
+    // 清除之前的計時器（如果存在）
+    if (timer.value) clearTimeout(timer.value)
+    // 創建新的計時器
+    timer.value = setTimeout(task, delay)
+}
 </script>
 
 <template>
@@ -33,28 +58,7 @@ onMounted(() => {
         <HeaderView />
         <main class="main_block">
             <!-- 加入購物車小圖 -->
-            <div class="addcar_item">
-                <ul>
-                    <li>
-                        <router-link to="/ItemList.vue">
-                            <img src="" alt="" />
-                        </router-link>
-                        <div class="addcar_item_text">
-                            <h1></h1>
-                            <div class="addcar_item_dollars">
-                                $
-                                <p></p>
-                                <p>&nbsp; x &nbsp;</p>
-                                <p></p>
-                            </div>
-                            <p class="item_id"></p>
-                            <p>已加入購物車</p>
-                        </div>
-                    </li>
-                </ul>
-                <router-link to="/CartView.vue" class="cart_pay">購物車結帳</router-link>
-            </div>
-
+            <addCart />
             <!-- 手機板側邊欄按鈕 -->
             <div id="aside-menu" @click="toggleAside" :class="{ active: isClicked }">
                 <span class="top"></span>
@@ -74,13 +78,14 @@ onMounted(() => {
             </aside>
 
             <!-- 顯示商品區 -->
-            <TotalItems :category="activeTab" />
+            <TotalItems :category="activeTab" @addCart="showCart" />
 
             <!--手機才有的遮罩(側邊欄的)-->
             <div id="mask" v-show="isClicked" @click="toggleAside()"></div>
             <!--手機才有的遮罩(herder的)-->
             <div id="common_mask" v-show="common.isMask" @click="common.toggleMask()"></div>
         </main>
+
         <FooterView />
     </div>
 </template>
@@ -99,87 +104,6 @@ onMounted(() => {
         flex-direction: column;
         position: relative;
         font-weight: 300;
-    }
-
-    //  -----加入購物車小圖----
-    .addcar_item {
-        position: fixed;
-        top: 60px;
-        right: 0;
-        transform: translateX(350px);
-        transition: all 0.5s;
-        background-color: white;
-        z-index: 10;
-
-        ul {
-            max-height: 260px;
-            overflow-y: scroll;
-            padding: 10px;
-            border: 1px solid $secondary_color;
-
-            &:-webkit-scrollbar {
-                border-width: 2px;
-                background-clip: padding-box;
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background: $primary_color;
-                border: 1px solid $secondary_color;
-            }
-
-            &::-webkit-scrollbar-track {
-                background: #fff;
-            }
-
-            li {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding-right: 30px;
-                border-bottom: 1px solid $secondary_color;
-                padding: 10px 5px;
-
-                img {
-                    width: 80px;
-                    flex-grow: 1;
-                }
-
-                .addcar_item_text {
-                    flex-grow: 2;
-                    margin-left: 20px;
-                    line-height: 22px;
-                    font-size: 0.8rem;
-
-                    h1 {
-                        color: black;
-                        border-radius: 0;
-                        background-color: $primary_color;
-                        text-align: center;
-                        padding: 5px;
-                    }
-
-                    .addcar_item_dollars {
-                        display: flex;
-                    }
-                }
-            }
-
-            .fadeInRight {
-                transform: translateX(0px);
-            }
-        }
-
-        .cart_pay {
-            display: block;
-            line-height: 40px;
-            text-align: center;
-            background-color: $secondary_color;
-
-            &:hover {
-                color: white;
-            }
-        }
     }
 
     //  -------側邊欄---------
@@ -446,5 +370,7 @@ onMounted(() => {
             }
         }
     }
+
+    // ==================
 }
 </style>
