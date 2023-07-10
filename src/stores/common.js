@@ -31,14 +31,14 @@ export const CartStore = defineStore('cart',{
 
     let items =  this.getCartItem();
 
-    // let uniqueKey = itemObj.id+ '_'+ itemObj.size;
+    // 生成唯一键，使用商品的ID和尺寸
+    let uniqueKey = itemObj.id+ '_'+ itemObj.size;
 
-    
     // 若local有東西
     if (items) { 
 
-        //1 找出已經存在的產品與選擇的產品做判斷(find回傳物件)
-        let exist_item = items.find((localItemObj)=> localItemObj.id === itemObj.id)
+        //1 找出已經存在產品 與 選擇的產品 的唯一鍵做判斷(find回傳物件)
+        let exist_item = items.find((localItemObj)=> localItemObj.key === uniqueKey)
 
         //2 找出不一樣的產品做判斷(fillter回傳陣列)
         let different_item = items.filter(function (local_item_obj) {
@@ -63,17 +63,43 @@ export const CartStore = defineStore('cart',{
             //合併不一樣的產品和一樣的產品
             different_item.push(exist_item);
         }
-
         //4 沒有一樣的產品就把點擊到的加入
         else {
-            itemObj.total = itemObj.num * itemObj.price;
-            items.push(itemObj);  
+            // itemObj.total = itemObj.num * itemObj.price;
+            // items.push(itemObj);  
+            let newCartItem = {
+                key: uniqueKey,
+                id: itemObj.id,
+                name:itemObj.name,
+                chineseName:itemObj.chineseName,
+                size: itemObj.size,
+                num: itemObj.num,
+                price: itemObj.price,
+                total: itemObj.num * itemObj.price,
+                cover:itemObj.cover,
+                image:itemObj.image
+              };
+              items.push(newCartItem);
         }
     }
     // 若local完全是空的 
     else {    
-        itemObj.total =  itemObj.num *  itemObj.price;
-        items = [itemObj];
+        // itemObj.total =  itemObj.num *  itemObj.price;
+        // items = [itemObj];
+        items = [
+            {
+                key: uniqueKey,
+                id: itemObj.id,
+                name:itemObj.name,
+                chineseName:itemObj.chineseName,
+                size: itemObj.size,
+                num: itemObj.num,
+                price: itemObj.price,
+                total: itemObj.num * itemObj.price,
+                cover:itemObj.cover,
+                image:itemObj.image
+            }
+          ];
     }
       //將 JavaScript 值轉換為 JSON 字符串，物件變字串存入
       localStorage.setItem("car", JSON.stringify(items));

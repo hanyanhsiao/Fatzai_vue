@@ -194,8 +194,13 @@ function toggleHeart(item) {
 // -----------加入購物車-----------------
 const emit = defineEmits(['addCart'])
 function addCart(item) {
-    item.num = 1
-    emit('addCart', item)
+
+    // 列表頁加入數量預設1
+    item.num = 1;
+
+    // 尺寸預設第一個
+    var cartItemCopy = { ...item, size: item.size[0] }
+    emit('addCart', cartItemCopy)
     // console.log("加入的產品"+item)
 }
 </script>

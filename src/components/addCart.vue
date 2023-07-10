@@ -28,7 +28,7 @@ watch(itemsInLocal, () => {
                         <p>&nbsp; X &nbsp;</p>
                         <p>{{ item.num }}</p>
                     </div>
-                    <p class="item_id">{{ item.chineseName }}</p>
+                    <p class="item_id">{{ item.chineseName }} - {{ item.size }}</p>
                     <!-- <p>已加入購物車</p> -->
                 </div>
             </li>
