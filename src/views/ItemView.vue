@@ -2,13 +2,121 @@
 import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
 import ItemCarousel from '../components/ItemCarousel.vue'
-import { useCommonStore } from '@/stores/common'
-import { onMounted } from 'vue'
-import { ref } from 'vue'
+import addCart from '../components/addCart.vue'
 
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useCommonStore, useProductsStore, CartStore } from '@/stores/common'
+import Timer from '../model/Timmer'
+
+
+const router = useRouter()
 const common = useCommonStore()
-const currentTab = ref('delivery');
-// 下方商品說明
+
+// -----------顯示點擊的產品--------
+const category = ref('全部商品')
+const currentItem = ref()
+const num = ref(1)
+
+// 1 傳入點擊的商品id及類別id
+const itemId = router.currentRoute.value.query.id
+const itemCategory = router.currentRoute.value.query.product
+
+// 2 撈出pinia中的全部商品做比對
+const productsStore = useProductsStore()
+const totalItems = productsStore.totalItems
+
+// 3 比對類別
+let filterArray = totalItems.filter(eachCate => {
+    return eachCate.id === itemCategory
+})
+// 4 比對後的存放空間
+let itemList = []
+
+if (filterArray.length == 0) {
+    // 5-1 全部商品
+    filterArray = totalItems
+    filterArray.forEach(eachCate => {
+        itemList.push(...eachCate.items)
+    })
+    // console.log(itemList)
+    // console.log(filterArray)
+
+} else {
+    // 5-2 各類別
+    category.value = filterArray[0].name
+    itemList.push(...filterArray[0].items)
+}
+// console.log(itemList)
+
+// 6 比對產品
+let filterItem = itemList.filter(eachItem => {
+    return eachItem.id == itemId
+})
+
+// 7 抓出該產品
+currentItem.value = filterItem[0]
+// console.log(currentItem.value)
+
+// 總金額預設1個的金額
+const total = ref(currentItem.value.price)
+
+// -----------圖片切換--------------
+const mainItem = ref(currentItem.value.cover)
+
+// -----------數量加減--------------
+function changeNum(type, price) {
+    if (type === 'decrease' && num.value > 1) {
+        num.value--
+    } else if (type === 'increase' && num.value < 10) {
+        num.value++
+    }
+    total.value = num.value * price
+}
+
+// -----------尺寸選擇--------------
+const checkedButton = ref()
+onMounted(() => {
+    checkedButton.value = currentItem.value.size[0]
+})
+
+
+function checkedSize(button) {
+    console.log(button)
+}
+
+// ----------加入購物車小圖----------
+
+const cartStore = CartStore()
+const itemsInLocal = ref(null)
+const timer = ref(null)
+
+// 點擊後要做的事
+function showCart(item) {
+
+    // 1 從右側滑入
+    const addCarItem = document.querySelector('.addcar_item')
+    addCarItem.classList.add('fadeInRight')
+
+    // 2 計算要加入的金額跟數量、選擇尺寸後複製一份商品資訊
+    item.num = num.value
+    var cartItemCopy = { ...item, size: checkedButton.value }
+    console.log(cartItemCopy);
+
+    // 3 存入local
+    cartStore.addCartItem(cartItemCopy)
+
+    // 4 抓出local顯示
+    itemsInLocal.value = cartStore.getCartItem()
+
+    // 呼叫計時器
+    timer.value = new Timer(() => {
+        const element = document.querySelector('.addcar_item')
+        element.classList.remove('fadeInRight')
+    }, 2000)
+}
+// --------下方商品說明--------------
+const currentTab = ref('delivery')
 const tabs = ref([
     {
         id: 'delivery',
@@ -109,10 +217,8 @@ const tabs = ref([
         ]
     }])
 function changeTab(tabname) {
-    currentTab.value = tabname;
+    currentTab.value = tabname
 }
-onMounted(() => {
-})
 
 </script>
 
@@ -121,46 +227,31 @@ onMounted(() => {
         <HeaderView />
         <main>
             <div class="wrapper">
-                <!-- <div class="addcar_item">
-          <ul>
-            <li>
-              <a href="./item.html">
-                <img src="" alt="">
-              </a>
-              <div class="addcar_item_text">
-                <h1></h1>
-                <div class="addcar_item_dollars">
-                  $<p></p>
-                  <p> &nbsp; x &nbsp;</p>
-                  <p></p>
-                </div>
-                <p class="item_id"></p>
-                <p>已加入購物車</p>
-              </div>
-            </li>
-          </ul>
-          <a href="./car.html" class="cart_pay">購物車結帳</a>
-        </div> -->
+
+                <!-- 加入購物車小圖 -->
+                <addCart :items-in-local="itemsInLocal" :timer="timer" />
 
                 <!-- 麵包屑-->
                 <ol class="breadcrumb">
                     <li><router-link to="./ItemList">產品列表</router-link></li>
-                    <li><router-link to="./ItemList">小塔系列</router-link></li>
-                    <li><router-link to="#">提拉米蘇塔</router-link></li>
+                    <li><router-link :to="{ path: './ItemList', query: { product: itemCategory } }">{{ category
+                    }}</router-link></li>
+                    <li><router-link to="#">{{ currentItem.chineseName }}</router-link></li>
                 </ol>
 
                 <!-- 上方商品介紹 -->
                 <div class="item_block">
                     <div class="left_block">
-                        <img src="../assets/image/items/tart1.jpg" alt="" id="main_item" />
+                        <img :src="mainItem" alt="" class="main_item" />
                         <div class="little_img">
-                            <img src="../assets/image/items/tart7.jpg" alt="" class="item_img" />
-                            <img src="../assets/image/items/tart6.jpg" alt="" class="item_img" />
+                            <img :src="currentItem.cover" alt="" @click="mainItem = currentItem.cover" />
+                            <img v-for="(image, index) in currentItem.image" :key="index" :src="image" alt=""
+                                @click="mainItem = image" />
                         </div>
                     </div>
                     <div class="right_block">
-                        <h1>提拉米蘇塔 &nbsp;</h1>
-                        <h1 class="item_name">Tiramisu Tart</h1>
+                        <h1>{{ currentItem.chineseName }} &nbsp;</h1>
+                        <h1 class="item_name">{{ currentItem.name }}</h1>
                         <div class="item_introduce">
                             <h3>產品介紹</h3>
                             <ul>
@@ -180,23 +271,33 @@ onMounted(() => {
                             </ul>
                         </div>
                         <h1 class="dollars_symbol">$</h1>
-                        <h1 class="dollars">199</h1>
+                        <h1 class="dollars">{{ currentItem.price }}</h1>
                         <div class="item_size">
-                            <button class="tart t_circle checked">圓塔</button>
-                            <button class="tart t_square">方塔</button>
-                            <p>圓塔：直徑8cm / 方塔：邊長6cm</p>
+                            <button v-for="(button, index) in currentItem.size" :key="index" class="tart"
+                                :class="{ checked: button === checkedButton }"
+                                @click="checkedButton = button, checkedSize(button)">
+                                {{ button }}</button>
+                            <!-- <p>圓塔：直徑8cm / 方塔：邊長6cm</p>  -->
                         </div>
                         <div class="item_quantity">
                             <ul class="count">
-                                <li><span id="num-decrease" class="num-count">－</span></li>
-                                <li><input readonly disabled type="text" class="input-num" id="input-num" value="1" /></li>
-                                <li><span id="num-jia" class="num-count">＋</span></li>
+                                <li>
+                                    <span id="num-decrease" class="num-count"
+                                        @click="changeNum('decrease', currentItem.price)">－
+                                    </span>
+                                </li>
+                                <li><input id="input-num" v-model="num" readonly disabled type="text" class="input-num" />
+                                </li>
+                                <li>
+                                    <span id="num-jia" class="num-count" @click="changeNum('increase', currentItem.price)">＋
+                                    </span>
+                                </li>
                             </ul>
+                            <h2>總金額: $ {{ total }}</h2>
                         </div>
-
                         <div class="item_buy">
                             <button class="btn1 add_shopping_car"><router-link to="./CartView">立即購買</router-link></button>
-                            <button class="btn2 add_shopping_car">加入購物車</button>
+                            <button class="btn2 add_shopping_car" @click="showCart(currentItem)">加入購物車</button>
                         </div>
                     </div>
                 </div>
@@ -207,11 +308,11 @@ onMounted(() => {
                 <!-- 下方商品說明 -->
                 <div class="item_description">
                     <div class="tab">
-                        <button v-for="tab in tabs" :key="tab.id" @click="changeTab(tab.id)"
-                            :class="{ active: currentTab === tab.id }">{{ tab.title }}
+                        <button v-for="tab in tabs" :key="tab.id" :class="{ active: currentTab === tab.id }"
+                            @click="changeTab(tab.id)">{{ tab.title }}
                         </button>
                     </div>
-                    <div v-for="tab in tabs" :key="tab.id" v-show="currentTab === tab.id" class="tabcontent">
+                    <div v-for="tab in tabs" v-show="currentTab === tab.id" :key="tab.id" class="tabcontent">
                         <template v-for="question in tab.questions" :key="question.id">
                             <p>{{ question.question }}</p>
                             <p v-html="question.answer"></p>
@@ -228,7 +329,7 @@ onMounted(() => {
                 </div>
             </div>
             <!--手機才有的遮罩-->
-            <div id="common_mask" v-show="common.isMask" @click="common.toggleMask()"></div>
+            <div v-show="common.isMask" id="common_mask" @click="common.toggleMask()"></div>
         </main>
         <FooterView />
     </div>
@@ -246,6 +347,7 @@ onMounted(() => {
         max-width: $page-width;
         margin: auto;
         padding: 30px;
+        padding-left: 0px;
         display: flex;
 
         @include pad {
@@ -396,8 +498,8 @@ onMounted(() => {
                 button {
                     border: 1px solid $secondary_color;
                     border-radius: 5px;
-                    padding: 5px;
-                    width: 80px;
+                    padding: 5px 20px;
+                    // width: 80px;
                     margin-right: 20px;
                     background-color: #ffffff;
 
@@ -413,6 +515,11 @@ onMounted(() => {
 
             /* -----------數量------------ */
             .item_quantity {
+                // border: 2px solid sandybrown;
+                gap: 30px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: space-between;
                 margin-bottom: 30px;
 
                 .count {

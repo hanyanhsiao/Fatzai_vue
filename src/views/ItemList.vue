@@ -7,6 +7,9 @@ import { useCommonStore, CartStore } from '@/stores/common'
 import { useRoute } from 'vue-router'
 import TotalItems from '../components/TotalItems.vue'
 import addCart from '../components/addCart.vue'
+import Timer from '../model/Timmer';
+
+
 const route = useRoute()
 const common = useCommonStore()
 
@@ -28,28 +31,25 @@ onMounted(() => {
 
 // ===============加入購物車小圖===================
 
-const addToCart = CartStore()
+const cartStore = CartStore()
+const itemsInLocal = ref(null)
+const timer = ref(null)
 
+// 點擊後要做的事
 function showCart(item) {
     // console.log(item)
+    // 1 從右側滑入
     const addCarItem = document.querySelector('.addcar_item')
     addCarItem.classList.add('fadeInRight')
+    // 2 存入local
+    cartStore.addCartItem(item)
+    // 3 抓出local顯示
+    itemsInLocal.value = cartStore.getCartItem()
     // 呼叫計時器
-    setTimer(2000)
-    addToCart.addCartItem(item)
-}
-// 儲存計時器
-const timer = ref(null)
-// 移除fadeInRight，向右收回
-const task = () => {
-    const element = document.querySelector('.addcar_item')
-    element.classList.remove('fadeInRight')
-}
-const setTimer = delay => {
-    // 清除之前的計時器（如果存在）
-    if (timer.value) clearTimeout(timer.value)
-    // 創建新的計時器
-    timer.value = setTimeout(task, delay)
+    timer.value = new Timer(() => {
+        const element = document.querySelector('.addcar_item')
+        element.classList.remove('fadeInRight')
+    }, 2000)
 }
 </script>
 
@@ -58,7 +58,7 @@ const setTimer = delay => {
         <HeaderView />
         <main class="main_block">
             <!-- 加入購物車小圖 -->
-            <addCart />
+            <addCart :itemsInLocal="itemsInLocal" :timer="timer" />
             <!-- 手機板側邊欄按鈕 -->
             <div id="aside-menu" @click="toggleAside" :class="{ active: isClicked }">
                 <span class="top"></span>
