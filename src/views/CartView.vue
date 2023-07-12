@@ -1,9 +1,129 @@
 <script setup>
 import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
-import { useCommonStore } from '@/stores/common'
+import { useCommonStore, CartStore } from '@/stores/common'
+import { computed, ref } from 'vue';
 
 const common = useCommonStore()
+const cartStore = CartStore()
+
+const itemsInLocal = ref(null)
+itemsInLocal.value = cartStore.getCartItem()
+console.log(itemsInLocal.value)
+
+// -----------數量加減--------------
+function changeNum(type, item) {
+    const newItem = { ...item }
+    if (type === 'decrease' && item.num > 1) {
+        item.num--
+        newItem.num = -1
+        cartStore.addCartItem(newItem)
+
+    } else if (type === 'increase' && item.num < 10) {
+        item.num++
+        newItem.num = 1
+        cartStore.addCartItem(newItem)
+    }
+    item.total = item.num * item.price
+    itemsInLocal.value = cartStore.getCartItem()
+
+}
+// -----------刪除商品--------------
+function deleteItem(TargetItem) {
+    // console.log("點到的" + TargetItem.key);
+
+    //1 移除整條畫面，淡出0.5秒
+    let targetItemUl = event.target.closest('.car_item_block');
+    targetItemUl.classList.add('fade_out');
+    setTimeout(() => { targetItemUl.remove(); }, 500);
+
+    //2 移除local
+    //不相同的要留下
+    let UpdatedItems = itemsInLocal.value.filter((item) => {
+        return TargetItem.key !== item.key
+    })
+
+    // 3回存至 localStorage
+    localStorage.setItem("car", JSON.stringify(UpdatedItems));
+    itemsInLocal.value = cartStore.getCartItem()
+    // console.log(itemsInLocal.value.length)
+
+}
+
+// -----------加購商品--------------
+const moreItems = [
+    {
+        id: 50,
+        name: '數字蠟燭組',
+        chineseName: '數字蠟燭組',
+        size: '任選兩支',
+        num: 1,
+        price: 50,
+        cover: 'src/assets/image/material/candles.jpg',
+    },
+    {
+        id: 51,
+        name: '雲朵盤叉組',
+        chineseName: '雲朵盤叉組',
+        size: '一組五人份',
+        num: 1,
+        price: 99,
+        cover: 'src/assets/image/material/plate.jpg',
+    },
+    {
+        id: 52,
+        name: 'Pistache tart',
+        chineseName: '開心果塔',
+        size: '尺寸固定',
+        num: 1,
+        price: 160,
+        cover: 'src/assets/image/items/tart5.jpg',
+    },
+    {
+        id: 53,
+        name: 'Chocolate Cake',
+        chineseName: '巧克力溜溜球蛋糕',
+        size: '尺寸固定',
+        num: 1,
+        price: 120,
+        cover: 'src/assets/image/items/mousse5.jpg',
+    },
+    {
+        id: 54,
+        name: 'Pistache Raspberry Mousse',
+        chineseName: '開心果覆盆子慕斯',
+        size: '尺寸固定',
+        num: 1,
+        price: 190,
+        cover: 'src/assets/image/items/mousse8.jpg',
+    },
+];
+
+// -------加購商品加入購物車----------
+function addCart(item) {
+    // 複製一份商品資訊
+    var cartItemCopy = { ...item }
+    // console.log(cartItemCopy);
+
+    // 存入local
+    cartStore.addCartItem(cartItemCopy)
+    itemsInLocal.value = cartStore.getCartItem()
+    // console.log(cartItemCopy);
+
+}
+// -----------訂單資訊--------------
+//使用優惠券
+const couponNum = ref(0);
+const toggleCoupon = () => {
+    couponNum.value = couponNum.value === 0 ? 50 : 0;
+};
+
+// 合計
+const summary = computed(() => {
+    return itemsInLocal.value ? itemsInLocal.value.reduce((total, item) => { return total + item.total }, 0) : 0
+})
+
+
 </script>
 
 <template>
@@ -61,29 +181,31 @@ const common = useCommonStore()
                     <li>刪除</li>
                 </ul>
                 <!-- 購買商品 -->
-                <div class="car_item_block">
+                <div class="car_item_block" v-for=" item in itemsInLocal" :key="item.key">
                     <ul class="car_item">
                         <li>
-                            <router-link to="./itemView">
-                                <img src="${get_img(item.item_id)}" alt="" />
+                            <router-link :to="{ path: './itemView', query: { id: item.id } }">
+                                <img :src="item.cover" alt="item.id" />
                             </router-link>
                         </li>
-                        <li class="item_name">${item.name}</li>
-                        <li class="item_id">${item.item_id}</li>
-                        <li class="dollars">${item.dollars}</li>
+                        <li class="item_name">{{ item.name }}</li>
+                        <li class="item_id">{{ item.size }}</li>
+                        <li class="dollars">{{ item.price }}</li>
                         <li class="num">
                             <ul class="count">
-                                <li><span id="num-decrease" class="num-count">－</span></li>
-                                <li><input readonly disabled type="text" class="input-num" id="input-num"
-                                        value="${item.num}" /></li>
-
-                                <li><span id="num-jia" class="num-count">＋</span></li>
+                                <li>
+                                    <span class="num-count" @click="changeNum('decrease', item)">－ </span>
+                                </li>
+                                <li><input readonly disabled type="text" class="input-num" v-model="item.num" /></li>
+                                <li>
+                                    <span class="num-count" @click="changeNum('increase', item)">＋ </span>
+                                </li>
                             </ul>
                         </li>
-                        <li class="total">${item.total}</li>
-                        <li class="delete"><i class="fa-regular fa-circle-xmark"></i></li>
+                        <li class="total">{{ item.total }}</li>
+                        <li class="delete"><i class="fa-regular fa-circle-xmark" @click="deleteItem(item)"></i></li>
                     </ul>
-                    <div class="mobile_delete">刪除</div>
+                    <div class="mobile_delete" @click="deleteItem(item)">刪除</div>
                 </div>
             </div>
 
@@ -91,70 +213,16 @@ const common = useCommonStore()
             <div class="more">
                 <p>限量加購</p>
                 <ul class="more_items">
-                    <li>
-                        <img src="../assets/image/material/candles.jpg" />
-                        <h3 class="item_name">數字蠟燭組</h3>
-                        <h3 class="item_id">(任選兩支)</h3>
+                    <li v-for="item in moreItems" :key="item.id">
+                        <img :src="item.cover" />
+                        <h3 class="item_name">{{ item.chineseName }}</h3>
+                        <h3 class="item_id">{{ item.size }}</h3>
                         $
-                        <p class="dollars">50</p>
-                        <button class="moreItem_addCart">
-                            <p>加入購物車</p>
-                            <!-- <script src="https://cdn.lordicon.com/ritcuqlt.js"></script> -->
-                            <lord-icon src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
-                                colors="primary:#dc9f58,secondary:#dc9f58" style="width: 30px; height: 30px" />
-                        </button>
-                    </li>
-                    <li>
-                        <img src="../assets/image/material/plate.jpg" />
-                        <h3 class="item_name">雲朵盤叉組</h3>
-                        <h3 class="item_id">(一組五人份)</h3>
-                        $
-                        <p class="dollars">99</p>
-                        <button class="moreItem_addCart">
+                        <p class="dollars">{{ item.price }}</p>
+                        <button class="moreItem_addCart" @click="addCart(item)">
                             <p>加入購物車</p>
                             <lord-icon src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
                                 colors="primary:#dc9f58,secondary:#dc9f58" style="width: 30px; height: 30px" />
-                        </button>
-                    </li>
-                    <li>
-                        <router-link to="./itemView">
-                            <img src="../assets/image/items/tart5.jpg" />
-                        </router-link>
-                        <h3 class="item_name">Pistache tart</h3>
-                        <h3 class="item_id">開心果塔</h3>
-                        $
-                        <p class="dollars">160</p>
-                        <button class="moreItem_addCart">
-                            <p>加入購物車</p>
-                            <lord-icon src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop" delay="1000"
-                                colors="primary:#dc9f58,secondary:#dc9f58" style="width: 30px; height: 30px" />
-                        </button>
-                    </li>
-                    <li>
-                        <router-link to="./itemView">
-                            <img src="../assets/image/items/mousse5.jpg" />
-                        </router-link>
-                        <h3 class="item_name">Chocolate Cake</h3>
-                        <h3 class="item_id">巧克力溜溜球蛋糕</h3>
-                        $
-                        <p class="dollars">120</p>
-                        <button class="moreItem_addCart">
-                            <p>加入購物車</p>
-                            <lord-icon clas="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop"
-                                delay="1000" colors="primary:#dc9f58,secondary:#dc9f58" style="width: 30px; height: 30px" />
-                        </button>
-                    </li>
-                    <li>
-                        <router-link to="./itemView"><img src="../assets/image/items/mousse8.jpg" /> </router-link>
-                        <h3 class="item_name">Pistache Raspberry Mousse</h3>
-                        <h3 class="item_id">開心果覆盆子慕斯</h3>
-                        $
-                        <p class="dollars">190</p>
-                        <button class="moreItem_addCart">
-                            <p>加入購物車</p>
-                            <!-- <script src="https://cdn.lordicon.com/ritcuqlt.js"></script> -->
-                            <lord-icon class="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop"
-                                delay="1000" colors="primary:#dc9f58,secondary:#dc9f58" style="width: 30px; height: 30px" />
                         </button>
                     </li>
                 </ul>
@@ -201,25 +269,25 @@ const common = useCommonStore()
                     <div class="money">
                         <div>
                             <p>合計:</p>
-                            <p>$ <span id="summary">0</span></p>
+                            <p>$ <span id="summary">{{ summary }}</span></p>
                         </div>
                         <div>
                             <p>品項:</p>
-                            <p>共 <span id="item_num">0</span> 樣</p>
+                            <p>共 <span id="item_num">{{ itemsInLocal.length }}</span> 樣</p>
                         </div>
-                        <button>使用優惠券</button>
+                        <button @click="toggleCoupon">使用優惠券</button>
                         <div>
                             <p>折扣:</p>
-                            <p>$ <span id="discount">50</span></p>
+                            <p>$ <span id="discount">{{ couponNum }}</span></p>
                         </div>
                         <div>
                             <p>運費:</p>
-                            <p>$ <span id="delivery_fee">0</span></p>
+                            <p>$ <span id="delivery_fee">{{ }}</span></p>
                         </div>
 
                         <div class="sum">
                             <p>總金額:</p>
-                            <p>$ <span id="sum">0</span></p>
+                            <p>$ <span id="sum">{{ }}</span></p>
                         </div>
                         <div class="buy">
                             <button type="button">確認結帳</button>
@@ -238,8 +306,9 @@ const common = useCommonStore()
 <style lang="scss" scoped>
 .cart {
     margin: 0 auto;
-    max-width: $page-width;
+    // max-width: $page-width;
     padding: 0 20px;
+    position: relative;
 
     // -------------------- 進度條 --------------------
     .process {
@@ -355,7 +424,7 @@ const common = useCommonStore()
             padding: 15px;
             border-bottom: 1px solid #ccc;
             display: grid;
-            grid-template-columns: 1fr 1.5fr 1.5fr 1fr 1fr 1fr 0.6fr;
+            grid-template-columns: 1fr 1.8fr 1.5fr 1fr 1fr 1fr 0.6fr;
 
             @include pad {
                 padding: 10px 5px;
@@ -364,7 +433,8 @@ const common = useCommonStore()
 
             li {
                 text-align: center;
-                font-weight: 300;
+                color: $fourth_color;
+                font-weight: 500;
 
                 @include pad {
 
@@ -378,93 +448,93 @@ const common = useCommonStore()
         }
 
         // ----------購物車品項----------
-        .car_item {
-            // outline: 1px solid rgb(205, 0, 0);
-            padding: 15px;
-            display: grid;
-            grid-template-columns: 1fr 1.5fr 1.5fr 1fr 1fr 1fr 0.6fr;
-            border-bottom: 1px solid #ccc;
+        .car_item_block {
             opacity: 1;
             transition: all 1s;
 
-            @include pad {
-                padding: 20px 5px 5px 5px;
-                border-bottom: 0;
-                grid-template-columns: 1fr 1.5fr 1.5fr 1.6fr 0.8fr;
-            }
-
-            li {
-                @include flexbox-center;
-                // width: 100%;
-                // white-space: pre-wrap;
-                // text-align: center;
-
-                img {
-                    width: 100%;
-
-                    &:hover {
-                        border: 2px solid $secondary_color;
-                    }
-                }
-
-                /* ----------數量加減--------- */
-                .count {
-                    @include flexbox-center;
-                    border: 1px solid #ccc;
-                    border-radius: 2px;
-
-                    .num-count {
-                        width: 25px;
-                        height: 25px;
-                        cursor: pointer;
-                        text-align: center;
-                        line-height: 25px;
-
-                        &:hover {
-                            background-color: $secondary_color;
-                        }
-                    }
-
-                    .input-num {
-                        width: 25px;
-                        height: 25px;
-                        cursor: pointer;
-                        text-align: center;
-                        line-height: 25px;
-
-                        @include pad {
-                            width: 30px;
-                        }
-                    }
-
-                    #num-decrease {
-                        border-radius: 2px 0 0 2px;
-                        border-right: 1px solid #ccc;
-                    }
-
-                    #num-jia {
-                        border-radius: 0 2px 2px 0;
-                        border-left: 1px solid #ccc;
-                    }
-                }
-
-                /* -----------刪除------------ */
-                i.fa-circle-xmark {
-                    cursor: pointer;
-                }
+            .car_item {
+                // outline: 1px solid rgb(205, 0, 0);
+                padding: 15px;
+                display: grid;
+                grid-template-columns: 1fr 1.8fr 1.5fr 1fr 1fr 1fr 0.6fr;
+                border-bottom: 1px solid #ccc;
 
                 @include pad {
+                    padding: 10px 5px 5px 5px;
+                    border-bottom: 0;
+                    grid-template-columns: 1fr 1.5fr 1.5fr 1.6fr 0.8fr;
+                }
 
-                    /* 移除內容的「金額」、「刪除」欄位 */
-                    &:nth-child(4),
-                    &:nth-child(7) {
-                        display: none;
+                li {
+                    @include flexbox-center;
+                    // width: 100%;
+                    // white-space: pre-wrap;
+                    text-align: center;
+
+                    img {
+                        width: 100%;
+
+                        &:hover {
+                            border: 2px solid $secondary_color;
+                        }
+                    }
+
+                    /* ----------數量加減--------- */
+                    .count {
+                        @include flexbox-center;
+                        border: 1px solid #ccc;
+                        border-radius: 2px;
+
+                        .num-count {
+                            width: 25px;
+                            height: 25px;
+                            cursor: pointer;
+                            text-align: center;
+                            line-height: 25px;
+
+                            &:hover {
+                                background-color: $secondary_color;
+                            }
+                        }
+
+                        .input-num {
+                            width: 25px;
+                            height: 25px;
+                            text-align: center;
+                            line-height: 25px;
+                            border-radius: 0;
+                            border: 0;
+                            border-right: 1px solid #ccc;
+                            border-left: 1px solid #ccc;
+
+
+
+                            @include pad {
+                                width: 30px;
+                            }
+                        }
+                    }
+
+                    /* -----------刪除------------ */
+                    i.fa-circle-xmark {
+                        cursor: pointer;
+                    }
+
+                    @include pad {
+
+                        /* 移除內容的「金額」、「刪除」欄位 */
+                        &:nth-child(4),
+                        &:nth-child(7) {
+                            display: none;
+                        }
                     }
                 }
+
+
             }
         }
 
-        .car_item.fade_out {
+        .car_item_block.fade_out {
             opacity: 0;
         }
 
@@ -479,6 +549,7 @@ const common = useCommonStore()
                 text-align: center;
                 border-bottom: 1px solid #ccc;
                 cursor: pointer;
+                width: 100%;
             }
         }
     }
@@ -553,149 +624,150 @@ const common = useCommonStore()
             }
         }
     }
-}
 
-/* ---------------------訂單資訊---------------------- */
-.order_inf {
-    // outline: 2px solid rgb(47, 0, 255);
-    max-width: $page-width;
-    margin: auto;
-    display: flex;
-    justify-content: space-between;
-    gap: 30px;
-
-    @include pad {
-        flex-direction: column;
-        gap: 0;
-    }
-
-    /* ----------左側運送資訊----------- */
-    .delivery {
+    /* ---------------------訂單資訊---------------------- */
+    .order_inf {
+        // outline: 2px solid rgb(47, 0, 255);
+        max-width: $page-width;
+        margin: auto;
         display: flex;
+        justify-content: space-between;
+        gap: 30px;
 
         @include pad {
-            width: 100%;
+            flex-direction: column;
+            gap: 0;
         }
 
-        .pickup,
-        .pay {
+        /* ----------左側運送資訊----------- */
+        .delivery {
             display: flex;
-            flex-direction: column;
-            padding: 15px;
 
             @include pad {
-                padding: 10px;
+                width: 100%;
             }
 
-            select {
-                margin: 15px 0;
-                height: 40px;
-                font-family: inherit;
-                font-weight: inherit;
-                font-size: inherit;
-                border: 1px solid #ccc;
-
-                &:focus-visible {
-                    outline: 2px solid $secondary_color;
-                    border-radius: 2px;
-                }
-
-                @include pad {
-                    margin-top: 10px;
-                }
-
-                option {
-                    font-weight: inherit;
-                }
-            }
-        }
-
-        .attention {
-            display: flex;
-            flex-direction: column;
-            padding: 15px;
-
-            @include pad {
-                padding: 10px;
-            }
-
-            .content {
-                background-color: $primary_color;
-                border: 1px solid #ccc;
+            .pickup,
+            .pay {
+                display: flex;
+                flex-direction: column;
                 padding: 15px;
-                margin-top: 15px;
 
                 @include pad {
                     padding: 10px;
-                    display: flex;
-                    flex-direction: column;
-                    line-height: 1.5;
+                }
+
+                select {
+                    margin: 15px 0;
+                    height: 40px;
+                    font-family: inherit;
+                    font-weight: inherit;
+                    font-size: inherit;
+                    border: 1px solid #ccc;
+
+                    &:focus-visible {
+                        outline: 2px solid $secondary_color;
+                        border-radius: 2px;
+                    }
+
+                    @include pad {
+                        margin-top: 10px;
+                    }
+
+                    option {
+                        font-weight: inherit;
+                    }
                 }
             }
-        }
-    }
 
-    /* ----------右側訂單資訊----------- */
-    .check {
-        display: flex;
-        width: 50%;
-
-        @include pad {
-            width: 100%;
-        }
-
-        .money {
-            padding: 15px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-
-            @include pad {
-                padding: 10px;
-            }
-
-            >div {
+            .attention {
                 display: flex;
-                justify-content: space-between;
-
-                p {
-                    line-height: 3;
-                }
-            }
-
-            button {
-                background-color: $primary_color;
-                border-radius: 5px;
-                border: 1px solid #ccc;
-                padding: 5px;
-                width: 30%;
-            }
-
-            .sum {
-                border-bottom: 2px solid #ccc;
-            }
-
-            .buy>button {
-                background-color: $secondary_color;
+                flex-direction: column;
                 padding: 15px;
-                line-height: 2rem;
-                text-align: center;
-                font-size: 1.2rem;
-                font-weight: 400;
-                box-shadow: 0 0 5px #ccc;
-                letter-spacing: 12px;
-                width: 100%;
-
-                &:hover {
-                    color: white;
-                }
 
                 @include pad {
-                    margin-top: 10px;
+                    padding: 10px;
+                }
+
+                .content {
+                    background-color: $primary_color;
+                    border: 1px solid #ccc;
+                    padding: 15px;
+                    margin-top: 15px;
+
+                    @include pad {
+                        padding: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        line-height: 1.5;
+                    }
+                }
+            }
+        }
+
+        /* ----------右側訂單資訊----------- */
+        .check {
+            display: flex;
+            width: 50%;
+
+            @include pad {
+                width: 100%;
+            }
+
+            .money {
+                padding: 15px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+
+                @include pad {
+                    padding: 10px;
+                }
+
+                >div {
+                    display: flex;
+                    justify-content: space-between;
+
+                    p {
+                        line-height: 3;
+                    }
+                }
+
+                button {
+                    background-color: $primary_color;
+                    border-radius: 5px;
+                    border: 1px solid #ccc;
+                    padding: 5px;
+                    width: 30%;
+                }
+
+                .sum {
+                    border-bottom: 2px solid #ccc;
+                }
+
+                .buy>button {
+                    background-color: $secondary_color;
+                    padding: 15px;
+                    line-height: 2rem;
+                    text-align: center;
+                    font-size: 1.2rem;
+                    font-weight: 400;
+                    box-shadow: 0 0 5px #ccc;
+                    letter-spacing: 12px;
+                    width: 100%;
+
+                    &:hover {
+                        color: white;
+                    }
+
+                    @include pad {
+                        margin-top: 10px;
+                    }
                 }
             }
         }
     }
+
 }
 </style>

@@ -80,11 +80,6 @@ onMounted(() => {
     checkedButton.value = currentItem.value.size[0]
 })
 
-
-function checkedSize(button) {
-    console.log(button)
-}
-
 // ----------加入購物車小圖----------
 
 const cartStore = CartStore()
@@ -115,6 +110,13 @@ function showCart(item) {
         element.classList.remove('fadeInRight')
     }, 2000)
 }
+
+// ----------立即購買---------------
+function buyNow(item) {
+    showCart(item);
+    router.push('./CartView')
+}
+
 // --------下方商品說明--------------
 const currentTab = ref('delivery')
 const tabs = ref([
@@ -274,29 +276,28 @@ function changeTab(tabname) {
                         <h1 class="dollars">{{ currentItem.price }}</h1>
                         <div class="item_size">
                             <button v-for="(button, index) in currentItem.size" :key="index" class="tart"
-                                :class="{ checked: button === checkedButton }"
-                                @click="checkedButton = button, checkedSize(button)">
+                                :class="{ checked: button === checkedButton }" @click="checkedButton = button">
                                 {{ button }}</button>
                             <!-- <p>圓塔：直徑8cm / 方塔：邊長6cm</p>  -->
                         </div>
                         <div class="item_quantity">
                             <ul class="count">
                                 <li>
-                                    <span id="num-decrease" class="num-count"
-                                        @click="changeNum('decrease', currentItem.price)">－
-                                    </span>
+                                    <span class="num-count" @click="changeNum('decrease', currentItem.price)">－ </span>
                                 </li>
-                                <li><input id="input-num" v-model="num" readonly disabled type="text" class="input-num" />
-                                </li>
+                                <li><input readonly disabled type="text" class="input-num" v-model="num" /></li>
                                 <li>
-                                    <span id="num-jia" class="num-count" @click="changeNum('increase', currentItem.price)">＋
-                                    </span>
+                                    <span class="num-count" @click="changeNum('increase', currentItem.price)">＋ </span>
                                 </li>
                             </ul>
                             <h2>總金額: $ {{ total }}</h2>
                         </div>
                         <div class="item_buy">
-                            <button class="btn1 add_shopping_car"><router-link to="./CartView">立即購買</router-link></button>
+
+                            <!-- <button class="btn1 add_shopping_car" @click="showCart(currentItem)"><router-link
+                                    to="./CartView">立即購買</router-link></button> -->
+                            <button class="btn1 add_shopping_car" @click="buyNow(currentItem)">
+                                立即購買</button>
                             <button class="btn2 add_shopping_car" @click="showCart(currentItem)">加入購物車</button>
                         </div>
                     </div>
@@ -539,6 +540,7 @@ function changeTab(tabname) {
                             line-height: 25px;
                             text-align: center;
                             cursor: pointer;
+                            background-color: $secondary_color;
                         }
 
                         /* 中間數字 */
@@ -550,14 +552,6 @@ function changeTab(tabname) {
                             width: 100%;
                             background-color: white;
                             border-right: 1px solid $secondary_color;
-                        }
-
-                        #num-decrease {
-                            background-color: $secondary_color;
-                        }
-
-                        #num-jia {
-                            background-color: $secondary_color;
                         }
                     }
                 }
