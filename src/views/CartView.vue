@@ -9,7 +9,7 @@ const cartStore = CartStore()
 
 const itemsInLocal = ref(null)
 itemsInLocal.value = cartStore.getCartItem()
-console.log(itemsInLocal.value)
+// console.log(itemsInLocal.value)
 
 // -----------數量加減--------------
 function changeNum(type, item) {
@@ -47,7 +47,6 @@ function deleteItem(TargetItem) {
     localStorage.setItem("car", JSON.stringify(UpdatedItems));
     itemsInLocal.value = cartStore.getCartItem()
     // console.log(itemsInLocal.value.length)
-
 }
 
 // -----------加購商品--------------
@@ -112,15 +111,30 @@ function addCart(item) {
 
 }
 // -----------訂單資訊--------------
-//使用優惠券
-const couponNum = ref(0);
-const toggleCoupon = () => {
-    couponNum.value = couponNum.value === 0 ? 50 : 0;
-};
-
 // 合計
 const summary = computed(() => {
     return itemsInLocal.value ? itemsInLocal.value.reduce((total, item) => { return total + item.total }, 0) : 0
+})
+
+//折扣
+const couponNum = ref(0);
+const toggleCoupon = () => {
+    couponNum.value = couponNum.value === 0 ? 50 : 0;
+    // console.log(couponNum.value)
+};
+
+// 運費
+const delivery = computed(() => {
+    const sum = summary.value - couponNum.value;
+    if (sum > 1000) {
+        return 0
+    } else {
+        return 170
+    }
+})
+// 總金額
+const total = computed(() => {
+    return summary.value - couponNum.value + delivery.value;
 })
 
 
@@ -275,19 +289,19 @@ const summary = computed(() => {
                             <p>品項:</p>
                             <p>共 <span id="item_num">{{ itemsInLocal.length }}</span> 樣</p>
                         </div>
-                        <button @click="toggleCoupon">使用優惠券</button>
+                        <button @click="toggleCoupon">使用$50折扣</button>
                         <div>
                             <p>折扣:</p>
                             <p>$ <span id="discount">{{ couponNum }}</span></p>
                         </div>
                         <div>
                             <p>運費:</p>
-                            <p>$ <span id="delivery_fee">{{ }}</span></p>
+                            <p>$ <span id="delivery_fee">{{ delivery }}</span></p>
                         </div>
 
                         <div class="sum">
                             <p>總金額:</p>
-                            <p>$ <span id="sum">{{ }}</span></p>
+                            <p>$ <span>{{ total }}</span></p>
                         </div>
                         <div class="buy">
                             <button type="button">確認結帳</button>

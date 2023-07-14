@@ -2,6 +2,8 @@
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Pagination } from 'swiper'
+import { useProductsStore } from '@/stores/common'
+
 
 // Import Swiper styles
 import 'swiper/css'
@@ -35,113 +37,35 @@ const navigation = {
     nextEl: '.arrow_next',
     prevEl: '.arrow_pre'
 }
+const productsStore = useProductsStore()
+const totalItems = productsStore.totalItems
+let itemList = []
+
+totalItems.forEach(eachCate => {
+    itemList.push(...eachCate.items);
+});
+
+const hotItem = itemList.slice(0, 8);
+
+console.log(hotItem)
+
 </script>
 
 <template>
     <div>
         <div class="carousel_container">
             <div class="arrow_pre"></div>
-            <swiper :modules="modules" :breakpoints="breakpoints" :pagination="pagination" :navigation="navigation" loop class="items">
-                <swiper-slide>
+            <swiper :modules="modules" :breakpoints="breakpoints" :pagination="pagination" :navigation="navigation" loop
+                class="items">
+                <swiper-slide v-for="item in hotItem" :key="item.id">
                     <div class="it">
-                        <router-link to="/ItemView">
+                        <router-link :to="{ path: '/ItemView', query: { product: category, id: item.id } }">
                             <div class="img_block">
-                                <img src="../assets/image/items/mousse7.jpg" alt="" />
+                                <img :src=item.cover alt="item.id" />
                             </div>
                             <div class="text_block">
-                                <h3>Cassis Mousse</h3>
-                                <p>$180</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse8.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Cassis Mousse</h3>
-                                <p>$180</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse8.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Pistache Mousse</h3>
-                                <p>$250</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse7.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Cassis Mousse</h3>
-                                <p>$180</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse5.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Chocolate Yo-Yo Cake</h3>
-                                <p>$199</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse9.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Vanilla Cake Role</h3>
-                                <p>$160</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse7.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Cassis Mousse</h3>
-                                <p>$180</p>
-                            </div>
-                        </router-link>
-                    </div>
-                </swiper-slide>
-                <swiper-slide>
-                    <div class="it">
-                        <router-link to="/ItemView">
-                            <div class="img_block">
-                                <img src="../assets/image/items/mousse7.jpg" alt="" />
-                            </div>
-                            <div class="text_block">
-                                <h3>Cassis Mousse</h3>
-                                <p>$180</p>
+                                <h3>{{ item.name }}</h3>
+                                <p>$ {{ item.price }}</p>
                             </div>
                         </router-link>
                     </div>
@@ -189,12 +113,14 @@ const navigation = {
             }
 
             .text_block {
-                /* outline: 2px solid rgb(255, 0, 0); */
-                line-height: 2;
-                text-align: center;
+                // outline: 2px solid rgb(255, 0, 0);
+                line-height: 1.5;
 
                 h3 {
                     color: $secondary_color;
+                    height: 60px;
+                    text-align: center;
+                    @include flexbox-center;
                 }
 
                 p {
