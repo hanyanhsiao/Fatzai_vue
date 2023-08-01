@@ -17,7 +17,7 @@ watch(itemsInLocal, () => {
     <div class="addcar_item" @mouseenter="timer.pause" @mouseleave="timer.resume">
         <ul>
             <li v-for="item in itemsInLocal" :key="item.id">
-                <router-link to="/ItemView">
+                <router-link :to="{ path: '/ItemView', query: { product: 'AllItems', id: item.id } }">
                     <img :src="item.cover" alt="item.id" />
                 </router-link>
                 <div class="addcar_item_text">

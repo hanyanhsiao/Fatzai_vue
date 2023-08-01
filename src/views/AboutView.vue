@@ -13,7 +13,7 @@ const common = useCommonStore()
             <section>
                 <div class="left"></div>
                 <div class="center" data-aos="fade-up" data-aos-duration="1000">
-                    <img src="../assets/image/material/Ellipse 12.png" alt="" />
+                    <img src="../assets/image/material/Ellipse12.png" alt="" />
                 </div>
                 <div class="right">
                     <p data-aos="fade-up" data-aos-duration="1000">

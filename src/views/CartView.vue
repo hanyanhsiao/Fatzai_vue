@@ -58,7 +58,7 @@ const moreItems = [
         size: '任選兩支',
         num: 1,
         price: 50,
-        cover: 'src/assets/image/material/candles.jpg',
+        cover: '../assets/image/material/candles.jpg',
     },
     {
         id: 51,
@@ -67,16 +67,16 @@ const moreItems = [
         size: '一組五人份',
         num: 1,
         price: 99,
-        cover: 'src/assets/image/material/plate.jpg',
+        cover: '../assets/image/material/plate.jpg',
     },
     {
         id: 13,
         name: 'Pistache tart',
         chineseName: '開心果塔',
-        size: '尺寸固定',
+        size: '圓塔',
         num: 1,
         price: 160,
-        cover: 'src/assets/image/items/tart5.jpg',
+        cover: '../assets/image/items/tart5.jpg',
     },
     {
         id: 14,
@@ -85,7 +85,7 @@ const moreItems = [
         size: '尺寸固定',
         num: 1,
         price: 120,
-        cover: 'src/assets/image/items/mousse5.jpg',
+        cover: '../assets/image/items/mousse5.jpg',
     },
     {
         id: 15,
@@ -94,7 +94,7 @@ const moreItems = [
         size: '尺寸固定',
         num: 1,
         price: 190,
-        cover: 'src/assets/image/items/mousse8.jpg',
+        cover: '../assets/image/items/mousse8.jpg',
     },
 ];
 
