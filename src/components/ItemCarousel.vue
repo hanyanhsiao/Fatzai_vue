@@ -1,10 +1,11 @@
 <script setup>
 // Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from 'swiper/vue'
+import { Swiper, SwiperSlide, } from 'swiper/vue'
 import { Navigation, Pagination } from 'swiper'
-import { useProductsStore } from '@/stores/common'
+import { ref, inject } from 'vue';
+// import { useProductsStore } from '@/stores/common'
 
-
+// ↓↓↓↓↓↓↓↓↓↓↓↓↓套件設定↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 // Import Swiper styles
 import 'swiper/css'
 import 'swiper/css/navigation'
@@ -37,8 +38,12 @@ const navigation = {
     nextEl: '.arrow_next',
     prevEl: '.arrow_pre'
 }
-const productsStore = useProductsStore()
-const totalItems = productsStore.totalItems
+
+// ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑套件設定↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
+
+// 載入全部商品
+const dbStore = inject('dbStore')
+const totalItems = dbStore.totalItems;
 let itemList = []
 
 totalItems.forEach(eachCate => {
@@ -47,7 +52,7 @@ totalItems.forEach(eachCate => {
 
 const hotItem = itemList.slice(0, 8);
 
-console.log(hotItem)
+const category = ref('AllItems');
 
 </script>
 

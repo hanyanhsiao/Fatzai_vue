@@ -70,7 +70,7 @@ const moreItems = [
         cover: 'src/assets/image/material/plate.jpg',
     },
     {
-        id: 52,
+        id: 13,
         name: 'Pistache tart',
         chineseName: '開心果塔',
         size: '尺寸固定',
@@ -79,7 +79,7 @@ const moreItems = [
         cover: 'src/assets/image/items/tart5.jpg',
     },
     {
-        id: 53,
+        id: 14,
         name: 'Chocolate Cake',
         chineseName: '巧克力溜溜球蛋糕',
         size: '尺寸固定',
@@ -88,7 +88,7 @@ const moreItems = [
         cover: 'src/assets/image/items/mousse5.jpg',
     },
     {
-        id: 54,
+        id: 15,
         name: 'Pistache Raspberry Mousse',
         chineseName: '開心果覆盆子慕斯',
         size: '尺寸固定',
@@ -137,6 +137,7 @@ const total = computed(() => {
     return summary.value - couponNum.value + delivery.value;
 })
 
+const category = ref('AllItems');
 
 </script>
 
@@ -198,8 +199,9 @@ const total = computed(() => {
                 <div class="car_item_block" v-for=" item in itemsInLocal" :key="item.key">
                     <ul class="car_item">
                         <li>
-                            <router-link :to="{ path: './itemView', query: { id: item.id } }">
-                                <img :src="item.cover" alt="item.id" />
+                            <img v-if="item.id >= 50" :src="item.cover" :alt="item.id" />
+                            <router-link v-else :to="{ path: '/ItemView', query: { product: category, id: item.id } }">
+                                <img :src=item.cover alt="item.id" />
                             </router-link>
                         </li>
                         <li class="item_name">{{ item.name }}</li>
@@ -292,7 +294,7 @@ const total = computed(() => {
                         <button @click="toggleCoupon">使用$50折扣</button>
                         <div>
                             <p>折扣:</p>
-                            <p>$ <span id="discount">{{ couponNum }}</span></p>
+                            <p>－$<span id="discount">{{ couponNum }}</span></p>
                         </div>
                         <div>
                             <p>運費:</p>
@@ -748,12 +750,18 @@ const total = computed(() => {
                     }
                 }
 
+                // 折扣按鈕
                 button {
                     background-color: $primary_color;
+                    box-shadow: 2px 2px 2px $secondary_color;
                     border-radius: 5px;
-                    border: 1px solid #ccc;
-                    padding: 5px;
+                    // border: 1px solid #ccc;
+                    padding: 10px 5px;
                     width: 30%;
+
+                    &:active {
+                        box-shadow: inset 0 0 10px 2px #f8d1a4;
+                    }
                 }
 
                 .sum {

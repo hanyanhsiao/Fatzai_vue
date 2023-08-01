@@ -1,7 +1,6 @@
 <script setup>
 import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
-// import $ from 'jquery'
 import { ref, onMounted } from 'vue'
 import { useCommonStore, CartStore } from '@/stores/common'
 import { useRoute } from 'vue-router'
@@ -74,6 +73,7 @@ function showCart(item) {
                     <li @click="activeTab = 'CupcakeItems'" :class="{ active: activeTab === 'CupcakeItems' }">杯子蛋糕系列</li>
                     <li @click="activeTab = 'TartItems'" :class="{ active: activeTab === 'TartItems' }">小塔系列</li>
                     <li @click="activeTab = 'ChouxItems'" :class="{ active: activeTab === 'ChouxItems' }">泡芙系列</li>
+                    <li @click="activeTab = 'MousseItems'" :class="{ active: activeTab === 'MousseItems' }">慕斯系列</li>
                 </ul>
             </aside>
 

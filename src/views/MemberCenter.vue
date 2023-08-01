@@ -1,17 +1,28 @@
 <script setup>
 import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
-import $ from 'jquery'
-import { onMounted } from 'vue'
+import { ref } from 'vue'
 import { useCommonStore } from '@/stores/common'
 
 const common = useCommonStore()
-onMounted(() => {
-    $('.openMenu').click(function () {
-        $('.Member_Area_menu').toggleClass('active')
-        // $("#common_mask").toggle();
-    })
-})
+
+//左側選單預設我的帳戶
+let activeTab = ref('MyAcoount')
+const changeTab = (tab) => {
+    activeTab.value = tab
+}
+//手機板選單收合
+const isClicked = ref(false)
+const toggleAside = () => {
+    isClicked.value = !isClicked.value
+}
+
+const signOut = () => {
+    if (confirm("確定要登出嗎?") == true) {
+        localStorage.clear();
+        window.location.replace('./')
+    }
+}
 </script>
 
 <template>
@@ -29,25 +40,27 @@ onMounted(() => {
             </div>
             <div class="Member_Area_wrapper">
                 <aside class="Member_Area_aside">
-                    <div class="openMenu">
+                    <div class="openMenu" @click="toggleAside">
                         <span>選單</span>
-                        <lord-icon class="openMenu_arrow" src="https://cdn.lordicon.com/rvuqcvqy.json" trigger="loop" delay="500" colors="primary:#809ba8,secondary:#809ba8" style="width: 30px; height: 30px" />
+                        <lord-icon class="openMenu_arrow" src="https://cdn.lordicon.com/rvuqcvqy.json" trigger="loop"
+                            delay="500" colors="primary:#809ba8,secondary:#809ba8" style="width: 30px; height: 30px" />
                     </div>
-                    <ul class="Member_Area_menu">
-                        <li id="defaultOpen" class="tablinks" onclick="changeSet(event, 'myAccount')">我的帳戶</li>
-                        <li id="personal_tab" class="tablinks" onclick="changeSet(event, 'personal')">修改個人資訊</li>
-                        <li id="order_tab" class="tablinks" onclick="changeSet(event, 'order')">訂單查詢</li>
-                        <li id="coupon_tab" class="tablinks" onclick="changeSet(event, 'coupon')">我的優惠券</li>
-                        <li id="favoritelist_tab" class="tablinks" onclick="changeSet(event, 'favoritelist')">
+                    <ul class="Member_Area_menu" :class="{ active: isClicked }">
+                        <li @click="changeTab('MyAcoount')" :class="{ active: activeTab === 'MyAcoount' }">我的帳戶</li>
+                        <li @click="changeTab('Personal')" :class="{ active: activeTab === 'Personal' }">修改個人資訊</li>
+                        <li @click="changeTab('Order')" :class="{ active: activeTab === 'Order' }">訂單查詢</li>
+                        <li @click="changeTab('MyCoupon')" :class="{ active: activeTab === 'MyCoupon' }">我的優惠券</li>
+                        <li @click="changeTab('FavoriteList')" :class="{ active: activeTab === 'FavoriteList' }">
                             <div class="aside_favorite">
                                 收藏清單
-                                <lord-icon src="https://cdn.lordicon.com/pnhskdva.json" trigger="loop" delay="1000" colors="primary:#dc9f58" style="width: 28px; height: 28px" />
+                                <lord-icon src="https://cdn.lordicon.com/pnhskdva.json" trigger="loop" delay="1000"
+                                    colors="primary:#dc9f58" style="width: 28px; height: 28px" />
                             </div>
                         </li>
                     </ul>
                 </aside>
 
-                <section id="myAccount" class="tabcontent">
+                <section v-if="activeTab === 'MyAcoount'" id="myAccount">
                     <!-- 右側上半部會員資訊 -->
                     <div class="Member_information">
                         <div class="personal_inf">
@@ -55,7 +68,7 @@ onMounted(() => {
                                 歡迎回來，
                                 <p class="customer_name">Jasmine</p>
                             </div>
-                            <button class="signOut">登出</button>
+                            <button class="signOut" @click="signOut">登出</button>
                         </div>
                         <ul class="shopping_inf">
                             <li class="total_spent item">
@@ -141,30 +154,33 @@ onMounted(() => {
                         </div>
                     </div>
                 </section>
-                <!-- <section class="tabcontent" id="personal">修改個人資訊</section>
-        <section class="tabcontent" id="order">訂單查詢</section>
-        <section class="tabcontent" id="coupon">我的優惠券</section> -->
-                <section id="favoritelist" class="tabcontent">
-                    <div class="favorite_block">
-                        <!-- <ul class="favorite_list">
-                        <li class="img"><a href="./item.html"><img src="" alt=""></a></li>
-                        <li class="favorite_inf">
-                            <div class="item_name">商品名稱</div>
-                            <div class="item_id">規格</div>
-                            <div class="dollars">價錢</div>
-                        </li>
-                        <li class="favorite_button">
-                            <button class="add_cart">
-                                <p>加入購物車</p>
-                                <lord-icon clas="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop"
-                                    delay="1000" colors="primary:#dc9f58,secondary:#dc9f58"
-                                    style="width:30px;height:30px">
-                                </lord-icon>
-                            </button>
-                            <div class="delete"><i class="fa-solid fa-trash-can"></i></div>
-                        </li>
-                    </ul> -->
-                    </div>
+                <section v-if="activeTab === 'Personal'" id="personal">修改個人資訊</section>
+                <section v-if="activeTab === 'Order'" id="order">訂單查詢</section>
+                <section v-if="activeTab === 'MyCoupon'" id="coupon">我的優惠券</section>
+                <section v-if="activeTab === 'FavoriteList'" id="favoritelist">收藏清單
+                    <!-- <div class="favorite_block">
+                        <ul class="favorite_list">
+                            <li class="img">
+                                <a href="./item.html">
+                                    <img src="" alt="" />
+                                </a>
+                            </li>
+                            <li class="favorite_inf">
+                                <div class="item_name">商品名稱</div>
+                                <div class="item_id">規格</div>
+                                <div class="dollars">價錢</div>
+                            </li>
+                            <li class="favorite_button">
+                                <button class="add_cart">
+                                    <p>加入購物車</p>
+                                    <lord-icon class="car_icon" src="https://cdn.lordicon.com/slkvcfos.json" trigger="loop"
+                                        delay="1000" colors="primary:#dc9f58,secondary:#dc9f58"
+                                        style="width:30px;height:30px" />
+                                </button>
+                                <div class="delete"><i class="fa-solid fa-trash-can"></i></div>
+                            </li>
+                        </ul>
+                    </div> -->
                 </section>
             </div>
             <!--手機才有的遮罩-->
@@ -176,6 +192,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .member_center {
+
     // 會員專區標題
     .Member_Area {
         height: 250px;
@@ -198,6 +215,7 @@ onMounted(() => {
             font-family: 'Orelega', serif;
             color: white;
             padding-top: 30px;
+            text-align: center;
 
             @include pad {
                 font-size: 7rem;
@@ -209,7 +227,7 @@ onMounted(() => {
         //  標題
         .Member_Area_title {
             position: absolute;
-            top: 210px;
+            top: 215px;
             padding: 10px 20px;
             font-size: 1.5rem;
             border: 1px solid $secondary_color;
@@ -357,8 +375,9 @@ onMounted(() => {
                 }
 
                 .signOut {
-                    border: 1px solid #ccc;
+                    // border: 1px solid #ccc;
                     background-color: $primary_color;
+                    box-shadow: 2px 2px 2px $secondary_color;
                     padding: 5px 10px;
                     border-radius: 5px;
                     width: 80px;

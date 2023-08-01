@@ -4,65 +4,79 @@ import FooterView from '../components/FooterView.vue'
 import ItemCarousel from '../components/ItemCarousel.vue'
 import addCart from '../components/addCart.vue'
 
-import { onMounted, ref } from 'vue'
+import { ref, inject, watch, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCommonStore, useProductsStore, CartStore } from '@/stores/common'
+import { useCommonStore, CartStore } from '@/stores/common'
 import Timer from '../model/Timmer'
-
 
 const router = useRouter()
 const common = useCommonStore()
 
-// -----------顯示點擊的產品--------
+// ------------定義--------------
 const category = ref('全部商品')
 const currentItem = ref()
 const num = ref(1)
+// 大圖
+const mainItem = ref()
+// 總金額
+const total = ref()
+// 尺寸選擇
+const checkedButton = ref()
+
+// ---------顯示點擊的產品--------
 
 // 1 傳入點擊的商品id及類別id
-const itemId = router.currentRoute.value.query.id
-const itemCategory = router.currentRoute.value.query.product
+const itemId = computed(() => {
+    return router.currentRoute.value.query.id
+})
+const itemCategory = computed(() => {
+    return router.currentRoute.value.query.product
+})
 
 // 2 撈出pinia中的全部商品做比對
-const productsStore = useProductsStore()
-const totalItems = productsStore.totalItems
+const dbStore = inject('dbStore')
+const totalItems = dbStore.totalItems;
+console.log(totalItems);
+watch(itemId, () => {
 
-// 3 比對類別
-let filterArray = totalItems.filter(eachCate => {
-    return eachCate.id === itemCategory
-})
-// 4 比對後的存放空間
-let itemList = []
-
-if (filterArray.length == 0) {
-    // 5-1 全部商品
-    filterArray = totalItems
-    filterArray.forEach(eachCate => {
-        itemList.push(...eachCate.items)
+    // 3 比對類別
+    let filterArray = totalItems.filter(eachCate => {
+        return eachCate.id === itemCategory.value
     })
-    // console.log(itemList)
-    // console.log(filterArray)
+    // 4 比對後的存放空間
+    let itemList = []
 
-} else {
-    // 5-2 各類別
-    category.value = filterArray[0].name
-    itemList.push(...filterArray[0].items)
-}
-// console.log(itemList)
+    if (filterArray.length == 0) {
+        // 5-1 全部商品
+        filterArray = totalItems
+        filterArray.forEach(eachCate => {
+            itemList.push(...eachCate.items)
+        })
 
-// 6 比對產品
-let filterItem = itemList.filter(eachItem => {
-    return eachItem.id == itemId
-})
+    } else {
+        // 5-2 各類別
+        category.value = filterArray[0].name
+        itemList.push(...filterArray[0].items)
+    }
 
-// 7 抓出該產品
-currentItem.value = filterItem[0]
-// console.log(currentItem.value)
+    // 6 比對產品
+    let filterItem = itemList.filter(eachItem => {
+        return eachItem.id == itemId.value
+    })
 
-// 總金額預設1個的金額
-const total = ref(currentItem.value.price)
+    // 7 抓出該產品
+    currentItem.value = filterItem[0]
 
-// -----------圖片切換--------------
-const mainItem = ref(currentItem.value.cover)
+    // 8 大圖 
+    mainItem.value = currentItem.value.cover
+
+    // 9 總金額 
+    total.value = currentItem.value.price
+
+    // 10 尺寸選擇
+    checkedButton.value = currentItem.value.size[0]
+}, { immediate: true })
+
 
 // -----------數量加減--------------
 function changeNum(type, price) {
@@ -74,14 +88,7 @@ function changeNum(type, price) {
     total.value = num.value * price
 }
 
-// -----------尺寸選擇--------------
-const checkedButton = ref()
-onMounted(() => {
-    checkedButton.value = currentItem.value.size[0]
-})
-
 // ----------加入購物車小圖----------
-
 const cartStore = CartStore()
 const itemsInLocal = ref(null)
 const timer = ref(null)
@@ -96,7 +103,7 @@ function showCart(item) {
     // 2 計算要加入的金額跟數量、選擇尺寸後複製一份商品資訊
     item.num = num.value
     var cartItemCopy = { ...item, size: checkedButton.value }
-    console.log(cartItemCopy);
+    // console.log(cartItemCopy);
 
     // 3 存入local
     cartStore.addCartItem(cartItemCopy)

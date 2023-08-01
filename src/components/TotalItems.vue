@@ -1,7 +1,6 @@
 <script setup>
-import { defineProps, toRefs, watch, ref } from 'vue'
+import { defineProps, toRefs, watch, ref, inject } from 'vue'
 import PagePlugin from './PagePlugin.vue'
-import { useProductsStore } from '@/stores/common'
 
 // -----------產品區塊子元件-------------------
 
@@ -11,132 +10,15 @@ const props = defineProps({
 
 // 從props解構為單獨的ref
 const { category } = toRefs(props)
-const title = ref('全部商品')
+const title = ref('AllItems')
 
 
 // 載入所有產品
-const productsStore = useProductsStore()
-const totalItems = productsStore.totalItems
-// const totalItems = [
-//     {
-//         id: 'SeasonItems',
-//         name: '季節限定',
-//         items: [
-//             {
-//                 id: 1,
-//                 name: 'Tiramisu Tart',
-//                 category: '圓塔',
-//                 price: 199,
-//                 image: 'src/assets/image/items/tart1.jpg'
-//             },
-//             {
-//                 id: 2,
-//                 name: 'Pistache Mousse',
-//                 category: '開心果慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse2.jpg'
-//             },
-//             {
-//                 id: 3,
-//                 name: 'Pistache Mousse',
-//                 category: '哈哈慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse11.jpg'
-//             },
-//             {
-//                 id: 4,
-//                 name: 'Pistache Mousse',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse10.jpg'
-//             },
-//             {
-//                 id: 5,
-//                 name: 'Pistache Pistache',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse12.jpg'
-//             },
-//             {
-//                 id: 6,
-//                 name: 'Pistache Pistache',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse8.jpg'
-//             },
-//             {
-//                 id: 6,
-//                 name: 'Pistache Pistache',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse5.jpg'
-//             }
-//         ]
-//     },
-//     {
-//         id: 'CupcakeItems',
-//         name: '杯子蛋糕系列',
-//         items: [
-//             {
-//                 id: 7,
-//                 name: 'CupcakeItems',
-//                 category: '圓塔',
-//                 price: 199,
-//                 image: 'src/assets/image/items/tart2.jpg'
-//             },
-//             {
-//                 id: 8,
-//                 name: 'CupcakeItems',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse11.jpg'
-//             }
-//         ]
-//     },
-//     {
-//         id: 'TartItems',
-//         name: '小塔系列',
-//         items: [
-//             {
-//                 id: 9,
-//                 name: 'TartItems',
-//                 category: '圓塔',
-//                 price: 199,
-//                 image: 'src/assets/image/items/tart4.jpg'
-//             },
-//             {
-//                 id: 10,
-//                 name: 'TartItems',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse7.jpg'
-//             }
-//         ]
-//     },
-//     {
-//         id: 'ChouxItems',
-//         name: '泡芙系列',
-//         items: [
-//             {
-//                 id: 11,
-//                 name: 'ChouxItems',
-//                 category: '圓塔',
-//                 price: 199,
-//                 image: 'src/assets/image/items/tart4.jpg'
-//             },
-//             {
-//                 id: 12,
-//                 name: 'ChouxItems',
-//                 category: '慕斯',
-//                 price: 180,
-//                 image: 'src/assets/image/items/mousse7.jpg'
-//             }
-//         ]
-//     }
-// ]
+const dbStore = inject('dbStore')
+const totalItems = dbStore.totalItems;
+// console.log(totalItems)
 
 // 定義要放入的陣列
-
 let itemList = []
 
 // 定義每一頁的個數、當前頁碼
